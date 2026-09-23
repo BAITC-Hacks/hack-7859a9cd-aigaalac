@@ -106,7 +106,7 @@ export default function Home() {
         />
         <StatCard
           label="Current quality of life"
-          value={INITIAL_QOL}
+          value={INITIAL_QOL.toFixed(2)}
           suffix="/ 100"
           detail="Your starting point for a better city"
           icon={ChartNoAxesCombined}

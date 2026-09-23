@@ -4,6 +4,7 @@ export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
   workers: 1,
+  timeout: 60000,
   use: {
     channel: "chrome",
     headless: true,
@@ -26,6 +27,7 @@ export default defineConfig({
       command: "npm run dev -- --hostname 127.0.0.1 --port 3100",
       url: "http://127.0.0.1:3100",
       env: {
+        OPENAI_API_KEY: "",
         NEXT_PUBLIC_USE_MOCK_API: "true",
         NEXT_TEST_DIST_DIR: ".next-e2e-demo",
       },
@@ -35,6 +37,7 @@ export default defineConfig({
       command: "npm run dev -- --hostname 127.0.0.1 --port 3101",
       url: "http://127.0.0.1:3101",
       env: {
+        OPENAI_API_KEY: "",
         NEXT_PUBLIC_USE_MOCK_API: "false",
         NEXT_TEST_DIST_DIR: ".next-e2e-api",
       },

@@ -2,6 +2,7 @@ import { ArrowUpRight, MapPin } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { District } from "@/types";
 import { districtLocations } from "@/data/map";
+import { INDICATOR_IDS, INDICATOR_LABELS } from "@/data/indicators";
 
 export default function MapDistrictInfo({
   district,
@@ -48,28 +49,34 @@ export default function MapDistrictInfo({
           : "All indicators above critical level"}
       </div>
       <div className="map-info-indicators">
-        {Object.entries(district.indicators).map(([label, value]) => (
-          <div className="map-info-indicator" key={label}>
-            <div>
-              <span>{label}</span>
-              <strong>
-                {value < 40 && <small>Critical</small>}
-                {value}
-              </strong>
+        {INDICATOR_IDS.map((key) => {
+          const value = district.indicators[key];
+          return (
+            <div className="map-info-indicator" key={key}>
+              <div>
+                <span>
+                  {key} · {INDICATOR_LABELS[key]}
+                </span>
+                <strong>
+                  {value < 40 && <small>Critical</small>}
+                  {value}
+                </strong>
+              </div>
+              <div
+                className={`map-info-track ${value < 40 ? "is-critical" : ""}`}
+              >
+                <span style={{ width: `${value}%` }} />
+              </div>
             </div>
-            <div
-              className={`map-info-track ${value < 40 ? "is-critical" : ""}`}
-            >
-              <span style={{ width: `${value}%` }} />
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <button className="map-focus-button" onClick={onFocus}>
         Explore {district.name} in 3D <ArrowUpRight size={17} />
       </button>
       <p className="map-data-note">
-        Simulator baseline · demo district indicators
+        Supplied synthetic dataset ·{" "}
+        {(district.populationShare * 100).toFixed(0)}% of city population
       </p>
     </aside>
   );

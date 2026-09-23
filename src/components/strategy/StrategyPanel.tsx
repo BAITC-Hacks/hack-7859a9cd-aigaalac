@@ -36,7 +36,10 @@ export default function StrategyPanel({
           {decisions.length}/{DECISION_LIMIT}
         </span>
       </div>
-      <p className="strategy-intro">Review your decisions before running.</p>
+      <p className="strategy-intro">
+        Exactly five unique initiatives. At most two per direction. Unspent
+        credits give no bonus.
+      </p>
       <div className="decision-slots">
         {Array.from({ length: DECISION_LIMIT }, (_, index) => {
           const d = decisions[index];

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -19,11 +19,23 @@ export default function AIAnalysisPanel({
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
+  const request = useRef<{
+    result: SimulationResult;
+    attempt: number;
+    promise: Promise<AIAnalysis>;
+  } | null>(null);
   useEffect(() => {
     let active = true;
     setAnalysis(null);
     setError(null);
-    analyzeResult(result)
+    // Reuse the same request when React replays effects; retry only on explicit action.
+    if (
+      request.current?.result !== result ||
+      request.current.attempt !== attempt
+    ) {
+      request.current = { result, attempt, promise: analyzeResult(result) };
+    }
+    request.current.promise
       .then((data) => {
         if (active) setAnalysis(data);
       })
@@ -66,11 +78,15 @@ export default function AIAnalysisPanel({
           </span>
           <div>
             <h2>Your city, explained</h2>
-            <p>AI strategy analysis</p>
+            <p>
+              {USE_MOCK_API
+                ? "Rules-based summary · not AI"
+                : "AI strategy analysis"}
+            </p>
           </div>
         </div>
         <span className="analysis-badge">
-          {USE_MOCK_API ? "EXAMPLE ANALYSIS" : "AI INSIGHTS"}
+          {USE_MOCK_API ? "RULES-BASED PREVIEW" : "AI INSIGHTS"}
         </span>
       </div>
       {error ? (

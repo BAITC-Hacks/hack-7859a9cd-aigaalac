@@ -12,7 +12,7 @@ import ScoreComparison from "@/components/results/ScoreComparison";
 import ResultsChart from "@/components/results/ResultsChart";
 import DistrictComparison from "@/components/results/DistrictComparison";
 import AIAnalysisPanel from "@/components/results/AIAnalysisPanel";
-import { USE_MOCK_API } from "@/lib/api/client";
+import SimulationDetails from "@/components/results/SimulationDetails";
 export default function ResultsPage() {
   const { result, ready } = useSimulation();
   if (!ready)
@@ -56,14 +56,9 @@ export default function ResultsPage() {
       <div className="result-notice">
         <CheckCircle2 size={19} />
         <span>
-          <strong>
-            {USE_MOCK_API
-              ? "Demo simulation complete."
-              : "Simulation complete."}
-          </strong>{" "}
-          {USE_MOCK_API
-            ? "These are fixed example results, independent of your selected strategy."
-            : "Your results are ready to explore."}
+          <strong>Simulation complete.</strong> {result.budgetSpent}/100 credits
+          used · {result.budgetRemaining} remaining · {result.horizonQuarters}{" "}
+          quarters.
         </span>
       </div>
       <ScoreComparison result={result} />
@@ -71,6 +66,7 @@ export default function ResultsPage() {
         <div className="results-main">
           <ResultsChart result={result} />
           <DistrictComparison result={result} />
+          <SimulationDetails result={result} />
         </div>
         <AIAnalysisPanel result={result} />
       </div>

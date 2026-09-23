@@ -1,12 +1,11 @@
 import type { AIAnalysis, SimulationResult } from "@/types";
-import { mockAnalysis } from "@/data/mockResults";
+import { describeResult } from "@/lib/simulation/describe";
 import { postJSON, USE_MOCK_API } from "./client";
 export async function analyzeResult(
   result: SimulationResult,
 ): Promise<AIAnalysis> {
   if (USE_MOCK_API) {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return structuredClone(mockAnalysis);
+    return describeResult(result);
   }
   const response = (await postJSON("/api/analyze", {
     simulationResult: result,
