@@ -1,47 +1,33 @@
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
   workers: 1,
-  timeout: 60000,
+  timeout: 30_000,
   use: {
-    channel: "chrome",
-    headless: true,
-    viewport: { width: 1440, height: 1000 },
+    baseURL: "http://127.0.0.1:3010",
+    trace: "retain-on-failure",
+    channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
   },
   projects: [
     {
-      name: "demo",
-      testMatch: ["demo.spec.ts", "dashboard.spec.ts"],
-      use: { baseURL: "http://127.0.0.1:3100" },
+      name: "desktop",
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1440, height: 1000 },
+      },
     },
     {
-      name: "api",
-      testMatch: "api.spec.ts",
-      use: { baseURL: "http://127.0.0.1:3101" },
+      name: "mobile",
+      use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
     },
   ],
-  webServer: [
-    {
-      command: "npm run dev -- --hostname 127.0.0.1 --port 3100",
-      url: "http://127.0.0.1:3100",
-      env: {
-        OPENAI_API_KEY: "",
-        NEXT_PUBLIC_USE_MOCK_API: "true",
-        NEXT_TEST_DIST_DIR: ".next-e2e-demo",
-      },
-      timeout: 120000,
-    },
-    {
-      command: "npm run dev -- --hostname 127.0.0.1 --port 3101",
-      url: "http://127.0.0.1:3101",
-      env: {
-        OPENAI_API_KEY: "",
-        NEXT_PUBLIC_USE_MOCK_API: "false",
-        NEXT_TEST_DIST_DIR: ".next-e2e-api",
-      },
-      timeout: 120000,
-    },
-  ],
+  webServer: {
+    command: "npm run start -- --hostname 127.0.0.1 --port 3010",
+    url: "http://127.0.0.1:3010",
+    reuseExistingServer: false,
+    env: { OPENAI_API_KEY: "" },
+    timeout: 60_000,
+  },
 });

@@ -1,0 +1,37 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import * as THREE from "three";
+import { batchCityScenery } from "../lib/city-batching.ts";
+
+test("batching retains world transforms, district picking and independently movable objects", () => {
+  const root = new THREE.Group();
+  const district = new THREE.Group(); district.position.set(12, 0, -9); district.rotation.y = Math.PI / 2;
+  district.userData.districtId = "esil"; root.add(district);
+  const geometry = new THREE.BoxGeometry();
+  const material = new THREE.MeshStandardMaterial();
+  const building = new THREE.Mesh(geometry, material); building.position.set(2, 3, 1); district.add(building);
+  const windows = new THREE.InstancedMesh(geometry, material, 2);
+  windows.position.y = 4;
+  windows.setMatrixAt(0, new THREE.Matrix4().makeTranslation(1, 0, 0));
+  windows.setMatrixAt(1, new THREE.Matrix4().makeTranslation(-1, 0, 0));
+  district.add(windows);
+  const animated = new THREE.Group(); animated.add(new THREE.Mesh(geometry, material)); district.add(animated);
+  root.updateMatrixWorld(true);
+  const expectedBuilding = building.matrixWorld.clone();
+  const expectedWindow = windows.matrixWorld.clone().multiply(new THREE.Matrix4().makeTranslation(1, 0, 0));
+  const picks: THREE.Object3D[] = [building];
+  batchCityScenery(root, new Set([animated]), picks);
+  assert.equal(picks.length, 1);
+  const batch = picks[0] as THREE.InstancedMesh;
+  assert.ok(batch.isInstancedMesh);
+  assert.equal(batch.count, 3);
+  assert.equal(batch.userData.districtId, "esil");
+  const matrix = new THREE.Matrix4();
+  batch.getMatrixAt(0, matrix); assert.deepEqual(matrix.elements.map(n => Math.round(n * 1000)), expectedBuilding.elements.map(n => Math.round(n * 1000)));
+  batch.getMatrixAt(1, matrix); assert.deepEqual(matrix.elements.map(n => Math.round(n * 1000)), expectedWindow.elements.map(n => Math.round(n * 1000)));
+  assert.equal(animated.parent, district);
+  assert.equal(animated.children.length, 1);
+  assert.equal(building.parent, null);
+  assert.ok(batch.boundingSphere && batch.boundingSphere.radius > 0);
+  geometry.dispose(); material.dispose(); batch.dispose();
+});

@@ -3,7 +3,9 @@ node_modules/
 .env*
 !.env.example
 *.tsbuildinfo
-.next-e2e-*/
-test-results/
 playwright-report/
-public/maplibre/
+test-results/
+.DS_Store
+
+# Local copy of the previous repository
+/hack-7859a9cd-aigaalac/

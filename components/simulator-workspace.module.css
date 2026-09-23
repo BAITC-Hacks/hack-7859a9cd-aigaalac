@@ -1,0 +1,73 @@
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.2fr);
+  gap: 28px;
+  align-items: start;
+  margin-bottom: 42px;
+}
+.choices { grid-column: 1; grid-row: 1; min-width: 0; }
+.choices :global(.action-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.choices :global(.action-card) { grid-column: auto; }
+.choices :global(.category-nav) { gap: 12px; margin-bottom: 22px; padding-bottom: 12px; }
+.livePanel {
+  grid-column: 2;
+  grid-row: 1;
+  position: sticky;
+  top: 16px;
+  align-self: start;
+  min-width: 0;
+  z-index: 10;
+  border-radius: 16px;
+  background: #f9fbf3;
+  border: 1px solid #d5dfca;
+  box-shadow: 0 12px 34px #294c3910;
+}
+.liveInstruction { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; line-height: 1.7; color: #5e7b4e; margin: 0 0 13px; }
+.liveInstruction > span { width: 6px; height: 6px; border-radius: 50%; flex: none; background: #77a75c; box-shadow: 0 0 0 4px #e6efda; }
+.liveHint { display: flex; align-items: center; gap: 6px; color: #63834d; font-size: 0.75rem; line-height: 1.5; margin-top: 13px; padding-top: 10px; border-top: 1px solid #d9e4c9; }
+.liveHint svg { flex: none; }
+.liveBudget { padding: 13px 17px 14px; background: #254d3a; color: #eff5df; border-radius: 0 0 15px 15px; }
+.budgetNumbers { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 14px; }
+.budgetNumbers > span { display: flex; align-items: center; justify-content: space-between; gap: 7px; font-size: 0.75rem; color: #c3d1b9; }
+.budgetNumbers > span + span { border-left: 1px solid #557157; padding-left: 14px; }
+.budgetNumbers strong { color: #e5efbf; font-size: 1.25rem; font-weight: 500; white-space: nowrap; }
+.budgetNumbers small { font-size: 0.75rem; font-weight: 400; }
+.budgetTrack { height: 4px; overflow: hidden; background: #55745b; border-radius: 10px; margin: 11px 0; }
+.budgetTrack > span { display: block; height: 100%; background: #d2e69f; transition: width .2s ease; border-radius: inherit; }
+.overBudget .budgetTrack > span { background: #edbc92; }
+.overBudget .budgetNumbers > span:last-child strong { color: #f5caa4; }
+.submitRow { display: grid; grid-template-columns: minmax(0, 1fr) 125px; gap: 13px; align-items: center; }
+.decisionCount { display: block; font-size: 0.8125rem; color: #e6edda; }
+.submitRow p { font-size: 0.75rem; line-height: 1.5; margin: 4px 0 0; color: #bdcdb0; max-height: 42px; overflow: auto; scrollbar-width: thin; }
+.submitRow :global(.confirm-button) { margin: 0; padding: 12px 10px; font-size: 0.8125rem; min-height: 42px; }
+
+@media (min-width: 851px) and (max-width: 1100px) {
+  .workspace { gap: 20px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .choices :global(.action-card) { padding: 14px 12px; }
+  .budgetNumbers { gap: 8px; }
+  .budgetNumbers > span { display: block; }
+  .budgetNumbers strong { display: block; margin-top: 3px; }
+  .budgetNumbers > span + span { padding-left: 10px; }
+}
+@media (max-width: 850px) {
+  .workspace { display: block; --live-panel-height: 340px; }
+  .livePanel { top: 0; margin-bottom: 20px; border-radius: 0 0 12px 12px; box-shadow: 0 8px 22px #294c391c; }
+  .choices :global(.category-section), .choices :global(.action-card), .choices input, .choices select { scroll-margin-top: calc(var(--live-panel-height) + 16px); scroll-margin-bottom: 24px; }
+  .liveBudget { padding: 8px 12px; border-radius: 0 0 11px 11px; }
+  .budgetNumbers { gap: 9px; }
+  .budgetNumbers > span { flex-wrap: wrap; gap: 3px 7px; font-size: 0.75rem; }
+  .budgetNumbers > span + span { padding-left: 9px; }
+  .budgetNumbers strong { font-size: 1.0625rem; }
+  .budgetNumbers small { display: none; }
+  .budgetTrack { margin: 6px 0; height: 3px; }
+  .submitRow { grid-template-columns: minmax(0, 1fr) 100px; gap: 8px; }
+  .submitRow :global(.confirm-button) { min-height: 36px; padding: 8px; font-size: 0.75rem; }
+  .decisionCount { font-size: 0.75rem; }
+  .submitRow p { font-size: 0.75rem; max-height: 2.9em; line-height: 1.45; margin-top: 2px; }
+}
+@media (max-width: 600px) {
+  .choices :global(.action-grid) { grid-template-columns: 1fr; }
+  .choices :global(.action-card) { padding: 17px 18px; }
+  .liveInstruction { font-size: 0.75rem; }
+}
+@media (prefers-reduced-motion: reduce) { .budgetTrack > span { transition: none; } }
