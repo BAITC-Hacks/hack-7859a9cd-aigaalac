@@ -1,0 +1,412 @@
+/* Shared color tokens for the light and dark workspace. */
+:root {
+  color-scheme: light;
+  --surface: #ffffff;
+  --surface-soft: #f0f5f3;
+  --surface-raised: #ffffff;
+  --ink: #1f3935;
+  --muted: #6e847c;
+  --paper: #f4f7f6;
+  --green: #16866b;
+  --border: #e0e9e5;
+  --chart-before: #cbded5;
+  --shadow: 0 6px 26px #244e3d07;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #15242c;
+  --surface-soft: #1a2d35;
+  --surface-raised: #1d323a;
+  --ink: #e4f1ed;
+  --muted: #96aca7;
+  --paper: #0d1920;
+  --green: #59d2b1;
+  --border: #2a3d43;
+  --chart-before: #38545b;
+  --shadow: 0 8px 30px #00000018;
+}
+body {
+  background: var(--paper);
+}
+::selection {
+  background: #3eaf8d44;
+}
+.sidebar {
+  background: var(--surface);
+}
+.topbar {
+  background: var(--surface);
+}
+.stat-card,
+.step-card,
+.district-card,
+.district-details,
+.measure-card,
+.strategy-panel,
+.panel {
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.stat-card,
+.step-card,
+.measure-card,
+.district-details,
+.panel,
+.strategy-panel {
+  border-radius: 14px;
+}
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  width: 42px;
+  background: #7db39a;
+  left: 22px;
+  bottom: 0;
+  border-radius: 4px 4px 0 0;
+  opacity: 0.5;
+}
+.stat-value {
+  letter-spacing: -1.3px;
+}
+.stat-accent {
+  background: linear-gradient(120deg, #e8f3e9, #e6f4ef);
+  border-color: #d1e8d8;
+}
+.page-heading h1 {
+  font-size: clamp(25px, 2.15vw, 34px);
+  letter-spacing: -1.1px;
+}
+.page-heading p,
+.measure-description,
+.step-card p {
+  color: var(--muted);
+}
+.hero {
+  border: 1px solid #326e5c;
+  box-shadow: 0 15px 40px #154f4215;
+  border-radius: 19px;
+  background-color: #134d42;
+  background-image:
+    radial-gradient(ellipse at 80% 20%, #377760 0, transparent 60%),
+    linear-gradient(120deg, #123d37, #155647);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image:
+    linear-gradient(#d9ecd4 1px, transparent 1px),
+    linear-gradient(90deg, #d9ecd4 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: linear-gradient(90deg, transparent 35%, black);
+}
+.hero-art {
+  z-index: 1;
+}
+.hero .city-illustration {
+  filter: drop-shadow(0 16px 24px #042f3d66);
+}
+.button-primary {
+  box-shadow: 0 4px 12px #167b6320;
+}
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 5px;
+  background: var(--surface-soft);
+  color: var(--muted);
+}
+.theme-toggle > span:not(.theme-toggle-label) {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+.theme-toggle .theme-sun {
+  background: var(--surface);
+  box-shadow: 0 1px 4px #163c331a;
+  color: #b4914c;
+}
+.theme-toggle-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+[data-theme="dark"] .theme-toggle .theme-sun {
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+}
+[data-theme="dark"] .theme-toggle .theme-moon {
+  background: #334b53;
+  color: #adeddc;
+  box-shadow: 0 1px 4px #0003;
+}
+.theme-toggle:hover {
+  border-color: var(--green);
+}
+
+/* Dark surfaces and semantic states, including every existing page. */
+[data-theme="dark"] .hero {
+  background-image:
+    radial-gradient(ellipse at 80% 20%, #245b56, transparent 60%),
+    linear-gradient(115deg, #142d38, #173f39);
+  border-color: #36594f;
+  box-shadow: 0 16px 45px #0002;
+}
+[data-theme="dark"] .brand-mark {
+  background: #368f78;
+}
+[data-theme="dark"] .sidebar-note,
+[data-theme="dark"] .bottom-callout,
+[data-theme="dark"] .strategy-tip {
+  background: #1c302f;
+  border-color: var(--border);
+}
+[data-theme="dark"] .nav-link {
+  color: #9bb0a9;
+}
+[data-theme="dark"] .nav-link.active {
+  background: #223d39;
+  color: #80d6b9;
+}
+[data-theme="dark"] .nav-link:hover {
+  background: #20343a;
+}
+[data-theme="dark"] .breadcrumb strong,
+[data-theme="dark"] .sidebar-note strong {
+  color: #c9ddd4;
+}
+[data-theme="dark"] .breadcrumb span {
+  color: #698277;
+}
+[data-theme="dark"] .mode-badge,
+[data-theme="dark"] .round-badge,
+[data-theme="dark"] .count-pill,
+[data-theme="dark"] .heading-count,
+[data-theme="dark"] .analysis-badge {
+  background: #223832;
+  border-color: #345044;
+  color: #adcb94;
+}
+[data-theme="dark"] .avatar {
+  background: #335247;
+  border-color: #224238;
+  color: #b2d7bf;
+}
+[data-theme="dark"] .stat-accent {
+  background: linear-gradient(120deg, #1c3734, #203b35);
+  border-color: #32594b;
+}
+[data-theme="dark"] .stat-accent .stat-value,
+[data-theme="dark"] .stat-accent .stat-top svg {
+  color: #88d2ac;
+}
+[data-theme="dark"] .stat-top,
+[data-theme="dark"] .stat-detail,
+[data-theme="dark"] .stat-value > span {
+  color: #9fb4a8;
+}
+[data-theme="dark"] .step-icon,
+[data-theme="dark"] .icon-box {
+  background: #233d36;
+  border-color: #314c3e;
+  color: #a0c59c;
+}
+[data-theme="dark"] .step-number {
+  color: #375345;
+}
+[data-theme="dark"] .district-card.selected {
+  background: #223e36;
+  border-color: #65b293;
+  box-shadow: 0 0 0 1px #65b293;
+}
+[data-theme="dark"] .district-score > span,
+[data-theme="dark"] .district-status {
+  color: #a0b6a7;
+}
+[data-theme="dark"] .mini-track,
+[data-theme="dark"] .indicator-track,
+[data-theme="dark"] .budget-track {
+  background: #2b413a;
+}
+[data-theme="dark"] .indicator-label,
+[data-theme="dark"] .budget-summary > div:not(.budget-track) {
+  color: #a4b9ac;
+}
+[data-theme="dark"] .indicator-label strong,
+[data-theme="dark"] .budget-summary strong {
+  color: #d6e8d7;
+}
+[data-theme="dark"] .critical-badge {
+  background: #473d28;
+  color: #ecc080;
+}
+[data-theme="dark"] .district-status.critical-text {
+  color: #d2ac75;
+}
+[data-theme="dark"] .filter-tabs button {
+  color: #a3b8ac;
+}
+[data-theme="dark"] .filter-tabs button.active,
+[data-theme="dark"] .filter-tabs button:hover {
+  background: #233e35;
+  border-color: #365143;
+  color: #9dd1a7;
+}
+[data-theme="dark"] .search-box,
+[data-theme="dark"] .district-selector select,
+[data-theme="dark"] .button-secondary {
+  background: var(--surface);
+  border-color: var(--border);
+  color: #b2caba;
+}
+[data-theme="dark"] .search-box input {
+  color: #d9e9df;
+}
+[data-theme="dark"] .category-transport {
+  background: #25394e;
+  color: #91b8dd;
+}
+[data-theme="dark"] .category-environment {
+  background: #2d3e2b;
+  color: #b0cc8e;
+}
+[data-theme="dark"] .category-social {
+  background: #443830;
+  color: #deb098;
+}
+[data-theme="dark"] .category-infrastructure {
+  background: #363247;
+  color: #bba8d7;
+}
+[data-theme="dark"] .effects > span {
+  background: #253c31;
+  border-color: #365140;
+  color: #b0d4ac;
+}
+[data-theme="dark"] .measure-actions,
+[data-theme="dark"] .budget-summary,
+[data-theme="dark"] .analysis-summary {
+  border-color: var(--border);
+}
+[data-theme="dark"] .button-add {
+  background: #21362e;
+  color: #acc7a6;
+  border-color: #355140;
+}
+[data-theme="dark"] .button-add:hover:enabled,
+[data-theme="dark"] .button-add.added {
+  background: #2d4b39;
+  color: #b9e3b6;
+  border-color: #537956;
+}
+[data-theme="dark"] .decision-slot {
+  background: #192c2d;
+  border-color: #344a40;
+  color: #98ad9b;
+}
+[data-theme="dark"] .decision-slot.filled {
+  background: #203931;
+  border-color: #365140;
+}
+[data-theme="dark"] .slot-number,
+[data-theme="dark"] .filled .slot-number {
+  background: #304935;
+  color: #b4d3a9;
+}
+[data-theme="dark"] .decision-slot strong {
+  color: #d0e2ca;
+}
+[data-theme="dark"] .button-primary {
+  color: #112c25;
+  background: #67c8a4;
+}
+[data-theme="dark"] .button-primary:hover:enabled {
+  background: #8adde0;
+  color: #11352e;
+}
+[data-theme="dark"] .button-primary:disabled {
+  background: #3b5447;
+  color: #879e8f;
+  box-shadow: none;
+}
+[data-theme="dark"] .result-notice,
+[data-theme="dark"] .recommendation {
+  background: #233e30;
+  border-color: #3b5842;
+  color: #b0c69c;
+}
+[data-theme="dark"] .result-notice strong,
+[data-theme="dark"] .recommendation > div,
+[data-theme="dark"] .recommendation p {
+  color: #c1d8ad;
+}
+[data-theme="dark"] .analysis-summary,
+[data-theme="dark"] .analysis-group ul {
+  color: #a6b9a2;
+}
+[data-theme="dark"] .analysis-group h3 {
+  color: #a4ce9c;
+}
+[data-theme="dark"] .analysis-group.risks h3 {
+  color: #d7b277;
+}
+[data-theme="dark"] .analysis-group.tradeoffs h3 {
+  color: #bca9d4;
+}
+[data-theme="dark"] .before-after strong {
+  color: #a2d6a5;
+}
+[data-theme="dark"] thead {
+  background: #20362d;
+  color: #b1c5a6;
+}
+[data-theme="dark"] td,
+[data-theme="dark"] th {
+  border-color: var(--border);
+}
+[data-theme="dark"] .chart-legend > span:first-child i {
+  background: var(--chart-before);
+}
+[data-theme="dark"] .chart-legend > span:last-child i {
+  background: var(--green);
+}
+[data-theme="dark"] .empty-icon {
+  background: #284333;
+}
+[data-theme="dark"] .error-message {
+  background: #482f2d;
+  border-color: #68423c;
+  color: #efb3a1;
+}
+[data-theme="dark"] .page-footer {
+  border-color: var(--border);
+}
+[data-theme="dark"] .map-canvas .maplibregl-ctrl-icon {
+  filter: invert(0.8);
+}
+[data-theme="dark"] .map-canvas .maplibregl-ctrl-attrib {
+  background: #d6e4dd;
+}
+[data-theme="dark"] .map-health.needs-attention,
+[data-theme="dark"] .map-info-indicator small {
+  color: #e0ba7b;
+}
+[data-theme="dark"] .city-explorer {
+  box-shadow: 0 12px 40px #0002;
+}

@@ -3,3 +3,7 @@ node_modules/
 .env*
 !.env.example
 *.tsbuildinfo
+.next-e2e-*/
+test-results/
+playwright-report/
+public/maplibre/

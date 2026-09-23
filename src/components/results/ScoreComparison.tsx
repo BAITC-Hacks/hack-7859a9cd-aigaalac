@@ -1,4 +1,52 @@
-import { ArrowRight, ChartNoAxesCombined, ShieldCheck, TrendingUp } from "lucide-react";
+import {
+  ArrowRight,
+  ChartNoAxesCombined,
+  ShieldCheck,
+  TrendingUp,
+} from "lucide-react";
 import type { SimulationResult } from "@/types";
 import { StatCard } from "@/components/ui/StatCard";
-export default function ScoreComparison({ result }: { result: SimulationResult }) { return <div className="stats-grid result-stats"><StatCard label="Final quality of life" value={result.finalScore.toFixed(2)} suffix="/ 100" detail="The city's outlook after your strategy" icon={ChartNoAxesCombined} accent/><div className="stat-card"><div className="stat-top"><span>Before → After</span><TrendingUp size={19}/></div><div className="before-after">{result.initialScore.toFixed(2)}<ArrowRight size={21}/><strong>{result.finalScore.toFixed(2)}</strong></div><div className="stat-detail">A new chapter for your city</div></div><StatCard label="Score change" value={`${result.delta >= 0 ? "+" : ""}${result.delta.toFixed(2)}`} suffix="points" detail="Change reported by the simulation" icon={TrendingUp}/><StatCard label="Critical indicators" value={result.criticalAfter} suffix={`from ${result.criticalBefore}`} detail="Indicators with a score below 40" icon={ShieldCheck}/></div>; }
+export default function ScoreComparison({
+  result,
+}: {
+  result: SimulationResult;
+}) {
+  return (
+    <div className="stats-grid result-stats">
+      <StatCard
+        label="Final quality of life"
+        value={result.finalScore.toFixed(2)}
+        suffix="/ 100"
+        detail="The city's outlook after your strategy"
+        icon={ChartNoAxesCombined}
+        accent
+      />
+      <div className="stat-card">
+        <div className="stat-top">
+          <span>Before → After</span>
+          <TrendingUp size={19} />
+        </div>
+        <div className="before-after">
+          {result.initialScore.toFixed(2)}
+          <ArrowRight size={21} />
+          <strong>{result.finalScore.toFixed(2)}</strong>
+        </div>
+        <div className="stat-detail">A new chapter for your city</div>
+      </div>
+      <StatCard
+        label="Score change"
+        value={`${result.delta >= 0 ? "+" : ""}${result.delta.toFixed(2)}`}
+        suffix="points"
+        detail="Change reported by the simulation"
+        icon={TrendingUp}
+      />
+      <StatCard
+        label="Critical indicators"
+        value={result.criticalAfter}
+        suffix={`from ${result.criticalBefore}`}
+        detail="Indicators with a score below 40"
+        icon={ShieldCheck}
+      />
+    </div>
+  );
+}
