@@ -1,208 +1,207 @@
-# 5 сағатқа әкім
+# 5 сағатқа әкім · Mayor for 5 Hours
 
-**Астананы басқарудың қазақша AI-симуляторы.** Пайдаланушы **100 шартты бірлік** бюджетті пайдаланып, 14 іс-шараның ішінен дәл **5 шешім** қабылдайды. Бағыттар: көлік, экология, әлеуметтік сала, қауіпсіздік және қалалық сервис. Аудандық жобаға бір аудан тағайындалады, қалалық жоба бес ауданға да әсер етеді. Сервер іске қосылу кідірісін, жобалардың бірлескен әсерін, халық үлесін және әлсіз аудандардың жағдайын ескеріп, **Astana Quality of Life Score** есептейді. OpenAI есептелген нәтижені қазақша түсіндіреді.
+A Kazakh-language city management simulator for Astana. Spend a **100-unit budget**, choose **five projects**, and see how your decisions change the city’s quality of life and its interactive 3D model. AI explains the calculated results in Kazakh.
 
-Деректер — хакатонға арналған синтетикалық модель. Есіл, Алматы, Сарыарқа, Байқоңыр және Нұра аудандарының берілген көрсеткіштері, халық үлестері, құндар мен әсерлер ресми статистика емес. «5 сағат» — ойынның атауы; кері санақ таймері жоқ. Симуляция көкжиегі — **8 тоқсан**, яғни 2 шартты жыл.
+**Hackathon prototype:** all district statistics, costs, and effects are synthetic. The city model is schematic, not a geographic map. “Five hours” is the game’s name; the simulation covers eight quarters and has no countdown timer.
 
-Қаланың интерактивті **3D макетінде** әр таңдау көрінеді: мектеп, саябақ, көлік желісі немесе сервис нысаны тиісті ауданға қосылады. Ауданды бөлек қарап, бастапқы күй мен таңдаулардан кейінгі көріністі салыстыруға болады. Макет сызбалық, нақты географиялық карта емес. Толық сипаттама: [docs/city-3d.md](docs/city-3d.md).
+> **Use the repository root.** The current project contains `app/`, `components/`, `lib/`, and `package.json` here. If your local checkout includes `hack-7859a9cd-aigaalac/` inside it, that is an ignored copy of the previous project; do not run or deploy that nested folder.
 
-Әр ауданның тұрақты сәулеттік белгісі бар: **Есіл — EXPO «Нұр Әлем» сферасы, Нұра — «Хан Шатыр», Сарыарқа — «Астана-1» вокзалы, Байқоңыр — «Жастар» сарайы, Алматы — «Жерұйық» саябағы**. Ғимараттардың пішіні, орамдардың түсі және алаңдары аудандарды ажыратуға көмектеседі. Бұл белгілер бастапқы қаланың бөлігі: бюджет жұмсамайды, бес шешім қатарына кірмейді және score-ға әсер етпейді. Жоба қосылса не алынса да сақталады. Ауданға сәйкестігін растайтын сілтемелер [3D құжаттамасындағы кестеде](docs/city-3d.md#аудандардың-тұрақты-сәулеттік-белгілері) берілген.
+[Run locally](#run-locally) · [Deploy to Vercel](#deploy-to-vercel) · [Demo walkthrough](#demo-walkthrough) · [Tests](#tests)
 
-Таңдау кезінде қала мен бюджет экранда бірге қалады: компьютерде бастама карточкалары сол жақта, 3D көрініс оң жақта; телефонда ықшам қала панелі карточкалардың үстінде бекітіледі. Жобаларды төмен қарай қарап, аудан таңдағанда өзгеріс сол көріністе бірден жаңарады. Аудандардың толық метрикалары таңдау бөлімінен кейін берілген.
+## What you can do
 
-## Интерфейс
+- Explore five districts: Есіл, Алматы, Сарыарқа, Байқоңыр, and Нұра.
+- Choose from 14 projects across transport, environment, social infrastructure, safety, and city services.
+- Watch projects appear in the 3D city, focus on a district, and switch between before/after views.
+- See budget, district metrics, implementation delays, and project synergies.
+- Confirm a plan to receive a deterministic quality-of-life score and an AI explanation.
+- Edit a plan and save scenarios A/B for comparison in the same browser.
+- Use the simulator on desktop or mobile; district information remains available if WebGL is unavailable.
 
-![Қаладағы өзгерістердің интерактивті 3D көрінісі](docs/screenshots/city.png)
+![Interactive city view](docs/screenshots/city.png)
 
-![A және B сценарийлерінің сақталған нәтижелері мен көрсеткіштері](docs/screenshots/comparison-desktop.png)
+## Run locally
 
-[Телефондағы салыстыру көрінісі](docs/screenshots/comparison-mobile.png)
-
-## Стек
-
-- Next.js **14.2.35**, App Router, React 18, TypeScript.
-- Tailwind CSS 3 және бейімделетін CSS; сыртқы шрифттер мен сурет сервистері қажет емес.
-- Three.js: браузердегі 3D қала, бағдарламамен жасалған нысандар және камераны басқару.
-- Локалды JSON деректері және бөлек `SimulationRepository` интерфейсі.
-- OpenAI Chat Completions API, `gpt-4o-mini` (әдепкі) немесе `gpt-4o`.
-- Node test runner + tsx; Playwright браузерлік тесттері.
-
-## Іске қосу
-
-Талаптар: **Node.js 22.18+**, npm. Тәуелділіктерді орнатуға және OpenAI талдауына интернет керек. Деректер қоры қажет емес.
-
-Жоба түбірінде:
+**Requirements:** Node.js **22.18 or later** and npm. Node.js 22 is a suitable choice for reproducing this project.
 
 ```bash
-npm install
+git clone https://github.com/BAITC-Hacks/hack-7859a9cd-aigaalac.git
+cd hack-7859a9cd-aigaalac
+npm ci
 cp .env.example .env.local
+npm run dev
 ```
 
-`.env.local` файлын редакторда ашып, өз кілтіңізді қойыңыз:
+Open **http://localhost:3000**. If you already have the project checked out, run the commands starting with `npm ci` from its root.
+
+The interface, 3D city, scoring, and A/B comparison work **without an API key**. To enable AI explanations, edit `.env.local`:
 
 ```dotenv
 OPENAI_API_KEY=your_openai_api_key_here
 OPENAI_MODEL=gpt-4o-mini
 ```
 
-Кілт тек серверде оқылады. Оған `NEXT_PUBLIC_` префиксін қоспаңыз. `.env.local` Git-ке қосылмайды. `.env.example` ішінде құпия кілт жоқ. `OPENAI_MODEL` міндетті емес; рұқсат етілген мәндер — `gpt-4o-mini`, `gpt-4o`.
+| Variable | Required? | Purpose |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | Only for AI explanations | Server-side API credential; the API account needs available quota. |
+| `OPENAI_MODEL` | No | Defaults to `gpt-4o-mini`. This implementation also accepts `gpt-4o`. |
 
-```bash
-npm run dev
-```
+Restart the development server after changing environment variables. Keep `.env.local` private: it is ignored by Git. Never give the key a `NEXT_PUBLIC_` prefix or put it in browser code.
 
-Браузерде **http://localhost:3000** ашыңыз. `.env.local` өзгертілгеннен кейін dev серверін қайта іске қосыңыз.
-
-Өндірістік жинақты жергілікті тексеру:
+To run the production build locally:
 
 ```bash
 npm run build
 npm start
 ```
 
-Қайта орнатуда lockfile-дағы дәл нұсқалар қажет болса, `npm ci` қолданыңыз.
+## Deploy to Vercel
 
-**API кілтінсіз де интерфейс пен есептеу жұмыс істейді.** Нәтиже экранында шынайы есептелген score және AI талдауы қолжетімсіз екені көрсетіледі. Жасанды AI мәтіні берілмейді. Кілт жарамды және API аккаунтының квотасы жеткілікті болса, «AI талдауын қайталау» талдауды қайта сұратады. Бір OpenAI сұрауының тайм-ауты — 35 секунд; автоматты ақылы retry жоқ.
+This section is a deployment tutorial. No hosted deployment is required to run or review the repository locally.
 
-## Ойын ережелері
+The app requires a **Next.js server runtime** for `POST /api/analyze`; do not deploy it as a static HTML export. No database or separate backend service is needed.
 
-- Бюджет барлық пайдаланушыға бірдей: **100 шартты бірлік**. Бұл теңге емес; қалдық жоғалмайды және қосымша score бермейді.
-- Дәл **5 түрлі іс-шара** таңдалады. Бір іс-шараны басқа ауданға қайта таңдап қосуға болмайды.
-- Бес бағыттың **әрқайсысынан дәл бір іс-шара** міндетті. Бір бағыттағы екінші бастаманы таңдау үшін бұрынғысын алып тастаңыз.
-- Бюджет жетпейтін бастаманың таңдауы бұғатталады және жетпейтін сома көрсетіледі. Сервер бюджет пен барлық бес бағытты тәуелсіз тексереді.
-- «Аудан» түріндегі іс-шара үшін бір аудан міндетті. «Қала» түріндегі іс-шара үшін аудан таңдалмайды; әсер барлық бес ауданға қолданылады, құны бір рет төленеді.
-- **M1 + M3** бірге таңдалмайды, аудандары әртүрлі болса да. **M4 + M7** және **M5 + M13** жұптары бір ауданда бірге іске асырылмайды.
-- Бюджет, сан, аудан, бағыт лимиті немесе үйлесімділік ережесі бұзылса, растау мүмкін емес. Сервер де сұрауды қабылдамайды және AI шақырмайды.
+### Option 1 — Vercel dashboard
 
-## Судьяларға арналған тексеру сценарийі
+1. Push the current project to a GitHub repository that your Vercel account can access.
+2. Sign in at [Vercel](https://vercel.com/new), choose **Add New → Project**, and import the repository.
+3. Configure the project:
 
-1. Бастапқы score — **52.56**, бюджет — **100**. Бес ауданның профилін, халық үлесін және он метрикасын қараңыз. Нұрада 40-тан төмен екі бастапқы көрсеткіш бар: **S1 = 38**, **S2 = 35**.
-2. Төмендегі бес жобаны белгілеңіз. Аудандық жобаларға көрсетілген ауданды тағайындаңыз.
+   | Setting | Value |
+   | --- | --- |
+   | Framework preset | **Next.js** |
+   | Root directory | Repository root (`./`); leave the default root selected |
+   | Install command | `npm ci` |
+   | Build command | `npm run build` |
+   | Output directory | Leave the Next.js default; do not override it |
+   | Node.js version | **22.x** |
 
-| Іс-шара | Аумақ | Құны |
-| --- | --- | ---: |
-| M7 — Мектеп пен балабақша | Нұра | 24 |
-| M1 — Автобустарға арналған арнайы жолақтар | Нұра | 18 |
-| M10 — Жарықтандыру және камералар | Нұра | 12 |
-| M12 — Өтініштердің бірыңғай цифрлық платформасы | Бүкіл қала | 14 |
-| M5 — Жеке секторды таза отынға көшіру | Сарыарқа | 25 |
+4. Under **Environment Variables**, add `OPENAI_API_KEY` for **Production** if AI explanations are needed. Add it for **Preview** too if you want AI in preview deployments. Optionally add `OPENAI_MODEL=gpt-4o-mini`. Enter the values without surrounding quotes. These variables must be configured on Vercel; your local `.env.local` is not the hosted configuration.
+5. Click **Deploy**. When the build finishes, open the URL Vercel provides.
+6. Run the [demo walkthrough](#demo-walkthrough). Confirm the home page loads, project selection works, and submitting the reference plan returns **55.61**. With a working key, the result also includes a Kazakh AI explanation; without one, the score still works and the app reports that AI analysis is unavailable.
 
-3. Жалпы құн **93**, қалдық **7** болады. «Растау» басылғаннан кейін score **55.61**, өсім **+3.05** шығады. Нұраның аудандық бағасы **49.18 → 53.13**, критикалық көрсеткіштер саны **2 → 1**. **M10 + M12** бірлескен бонусы Нұраның B1 көрсеткішіне қосылады.
-4. Аудандық нәтижелерден Нұраның **S1 = 48**, **S2 = 43.75**, **B1 = 67.50** мәндерін тексеріңіз. Қаладағы халық үлесімен өлшенген орташа аудан бағасы **56.8624 → 58.0776** болады.
-5. Бюджет бақылауын тексеру үшін M12 орнына M13-ті таңдап, оған Алматы ауданын тағайындаңыз. Құн **109**, жетпейтін сома **9** болады; растауға болмайды. Төрт шешіммен де растауға болмайды.
-6. Жарамды жоспарға оралып, AI талдауындағы күшті жақтарды, тәуекелдер мен ымыраларды және 1–2 ұсынысты қараңыз. «Қайта бастау» таңдауларды тазалайды.
+If the organization repository is missing from the import list, ask its owner to enable Vercel access, or use the CLI method below to deploy your local checkout to your own Vercel project.
 
-Таңдаулар белгі қою арқылы қосылады және алынады. Клиент шығынды, аудандық әсерді, кідіріс пен бірлескен әсерді көрсетеді. Алдын ала көрініс AI шақырмайды және жарамсыз жоспарға қорытынды score бермейді.
+After changing hosted environment variables, **redeploy** to apply them. A connected Git repository can trigger subsequent deployments when you push changes.
 
-3D көріністі тексеру: M7-ні Нұраға тағайындағанда оқу кешені пайда болады; ауданды Есілге ауыстырғанда нысан да ауысады. M12 қалалық сервис нүктесін бес ауданға қосады. Таңдау панеліндегі «Бұрын» жаңа нысандарды жасырады, «Кейін» оларды қайта көрсетеді; шешімдер мен бюджет сақталады. Жаңа бастама не аудан таңдалғанда панель жаңартылған «Кейін» көрінісіне ауысады. Телефондағы «Нысандар» батырмасы нысандар тізімін ашады. Камераның жақындату, алыстату, бұру және бастапқы орынға қайтару батырмаларын тексеріңіз. WebGL ашылмаса, мәтіндік аудан карточкалары мен есептелген нәтижелер қолжетімді болып қалады.
+### Option 2 — Vercel CLI
 
-Бес ауданның батырмаларын кезекпен басқанда камера тиісті ауданға ауысып, оның сәулеттік белгісінің атауы көрсетіледі. M7-ні Нұраға қосып, «Бұрын»/«Кейін» көріністерін ауыстырыңыз: мектептің көрінуі өзгереді, ал «Хан Шатыр» мен қалған төрт ауданның белгілері сақталады. Мектепті алып тастау да оларды жоймайды.
+Run these commands from the project root:
 
-## Жоспарды өңдеу және A/B салыстыру
-
-1. Бес бағыттан бір-бір жоба таңдап, нәтижені растаңыз.
-2. «A: нәтижені сақтау» батырмасын басыңыз.
-3. «Жоспарды өзгерту» таңдаулар мен аудандарды сақтап, өңдеу экранына қайтарады. Мысалы, M7 мектебін Нұрадан Есілге ауыстырыңыз.
-4. Қайта растаңыз да, «B: нәтижені сақтау» батырмасын басыңыз. Кестеде Score, шығын, қалдық, критикалық көрсеткіштер саны және бес ауданның ұпайы салыстырылады.
-5. «A: жоспарды ашу» сақталған таңдауларды өңдеуге қайтарады. Толған ұяшықтағы «нәтижемен ауыстыру» сол ұяшықты ағымдағы нәтижемен ауыстырады. «Қайта бастау» ағымдағы таңдауды тазартады; A/B жоспарлары бөлек «өшіру» батырмасымен жойылады.
-
-Браузерде тек іс-шара мен аудан идентификаторлары сақталады. Бетті қайта ашқанда олар қазіргі каталогпен тексеріліп, бірдей бастапқы деректерден қайта есептеледі. Ескірген немесе жарамсыз жоспар қабылданбайды. Сақтау мен салыстыру AI сұрауын жасамайды; ашылған жоспарды растау жаңа AI талдауын сұратады. Браузер жады қолжетімсіз болса, салыстыру бет жабылғанға дейін жұмыс істейді және ескерту көрсетіледі.
-
-## Score формуласы
-
-Он метриканың бәрі 0–100 аралығында: **жоғары болғаны жақсы**. Мысалы, T1 — жолдардың кептелістен бос болуы, E2 — ауаның тазалығы. Толық анықтамалар, салмақтар, каталог және бастапқы деректер: [docs/scoring.md](docs/scoring.md).
-
-```text
-H = 8 тоқсан
-realizedEffect = fullEffect × (H − lag) / H
-final[d][k] = clamp(initial[d][k] + sum(applicableRealizedEffects) + synergy[d][k], 0, 100)
-D[d] = sum(metricWeight[k] × final[d][k])
-D_avg = sum(populationShare[d] × D[d])
-N_crit = count(final[d][k] < 40)
-Astana Quality of Life Score = 0.7 × D_avg + 0.3 × min(D[d]) − N_crit
+```bash
+npx vercel@latest login
+npx vercel@latest link
 ```
 
-Салмақтардың 70%-ы қала бойынша нәтижеге, 30%-ы ең әлсіз ауданға тиесілі. Әрбір «аудан × метрика» жұбының соңғы мәні **қатаң түрде 40-тан төмен** болса, 1 ұпай шегеріледі; 40-тың өзі критикалық емес. Аудандық жобалар тек таңдалған ауданға, қалалық жобалар барлық ауданға әсер етеді. Бірлескен бонус кідіріске көбейтілмейді. Әсерлер мен бонустар алдымен қосылып, 0–100 шектеуі соңында бір рет қолданылады; шешімдердің реті нәтижені өзгертпейді.
+Choose your account/team, create or select a project, and use `./` as its source directory. Set the project’s Node.js version to **22.x** in Vercel’s project settings.
 
-Аралық есептер дөңгелектелмейді, экрандағы score екі ондық таңбамен беріледі. Бастапқы дәл нәтиже — **52.55768**, мысал жоспардың нәтижесі — **55.61002**. Мысал бес бағыттың әрқайсысынан бір жобаны қамтиды. Қалалық Score «ұпай» ретінде көрсетіледі: критикалық көрсеткіштер үшін айып болғандықтан, жалпы формула теориялық түрде теріс нәтиже бере алады. Жеке метрикалар мен аудан бағалары 0–100 аралығында қалады. Әртүрлі жоспарлар бірдей score бере алады: жасанды бірегейлік бонусы қосылмайды.
+If you need AI explanations, add the key through the interactive prompt:
 
-## Архитектура
-
-```text
-app/page.tsx                     Сервер компоненті: деректерді жүктеу
-components/simulator.tsx         Жобалар, аудан тағайындау, бюджет және нәтиже
-components/scenario-comparison.tsx A/B сақтау, қалпына келтіру және салыстыру
-components/simulator-workspace.module.css Таңдаулар жанындағы бекітілген қала панелі
-components/district-explorer.tsx Бес аудан, он метрика және өзгерістер
-components/city-view.tsx         3D көрініс басқаруы және мәтіндік баламасы
-components/city-scene.tsx        Three.js камерасы және интерактивті рендер
-app/api/analyze/route.ts         POST: сұрауды тексеру және талдау
-lib/types.ts                    Домен типтері және репозиторий интерфейсі
-lib/data.ts                     Локалды JSON репозиторийі (сервер)
-lib/score.ts                    Таза есептеу, кідіріс, бонустар және валидация
-lib/districts.ts                UI мен AI үшін аудандық есеп
-lib/city-visuals.ts             Шешімдер мен метрикаларды 3D күйіне түрлендіру
-lib/city-geometry.ts            Қала мен 14 жоба түрінің геометриясы
-lib/district-identities.ts      Аудандардың сәулеттік белгілері мен түстері
-lib/city-landmarks.ts           Бес тұрақты сәулеттік макеттің геометриясы
-lib/analyze.ts                  Валидация → score → AI түсіндірме
-lib/openai.ts                   OpenAI сұрауы және жауап құрылымын тексеру
-data/districts.json             Бес аудан, халық үлестері және он метрика
-data/actions.json               Аумақ түрі мен кідірісі бар 14 іс-шара
-tests/score.test.ts             Формула, ережелер, аудандық және қалалық әсер
-tests/analyze.test.ts           AI шақыру тәртібі және қателері
-tests/city-visuals.test.ts       3D нысандарының аумағы, өзгеруі және дерек тұтастығы
-tests/e2e/simulator.spec.ts      Компьютер/телефон сценарийлері және HTTP API
-tests/e2e/city-3d.spec.ts        WebGL көрінісі, камера, нысандар және мәтіндік балама
-tests/e2e/live-workspace.spec.ts Таңдау кезінде 3D көріністің экранда қалуы
-tests/e2e/district-identities.spec.ts Бес ауданның белгілері және олардың сақталуы
+```bash
+npx vercel@latest env add OPENAI_API_KEY production
 ```
 
-Клиент ережелерді алдын ала тексереді. Сервер тек іс-шара ID-і мен тиісті аудан ID-ін қабылдап, каталогтан құн, әсер, аумақ түрі және кідірісті өзі оқиды. Клиенттен жіберілген `budget`, `cost`, `impact` немесе `score` сенімді дерек ретінде қабылданбайды. Таза есептеу функцияларына AI, желі не файл оқу қажет емес.
+Then deploy:
 
-Толық емес таңдауда тек аудандық көрсеткіштердің болжамы мен бірлескен бонустар көрсетіледі; қорытынды қалалық Score есептелмейді. Ол бес шешімнің бәрі жарамды болғанда ғана шығады. Бастапқы Score бөлек анықтамалық мән ретінде сақталады. Алдын ала көрініс AI шақырмайды.
+```bash
+npx vercel@latest --prod
+```
 
-3D қабат сол есептелген метрикалар мен таңдалған іс-шараларды пайдаланады. Аудандық нысан тек өз ауданына, қалалық нысан барлық ауданға қосылады. Көрініс аудандық әсерлерді не score-ды қайта есептемейді және AI шақырмайды. Қате немесе аудан тағайындалмаған жоспар үшін бастапқы қала көрсетіледі. Three.js рендері тек клиентте жүктеледі; серверлік score оған тәуелсіз.
+Open the production URL printed by the CLI and follow the demo walkthrough. Repeat the final command after local changes to publish a new version. Never commit `.env.local` or paste a real API key into the README.
 
-OpenAI **тек жарамды жоспар расталып, сервер есебі аяқталғаннан кейін** шақырылады. Ол таңдалған шешімдерді, құнды, іске асқан әсерді, бірлескен бонустарды, аудандық өзгерістерді, әр шараның үлесін және score құрамдастарын алады. AI осы сандарды түсіндіреді, күшті жақтар мен ықтимал салдарды атап, 1–2 ұсыныс береді; сандарды есептемейді және өзгертпейді. Жауап `strengths`, `tradeoffs`, `recommendations` массивтері бар JSON ретінде алынып, қазақша тармақтармен көрсетіледі. Модель жауабы HTML ретінде орындалмайды. Құрылымды жауаптың негізі: [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
+Official reference: [Deploying with the Vercel CLI](https://vercel.com/docs/cli/deploy) and [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs).
 
-PostgreSQL-ге көшу үшін `SimulationRepository.getDistricts()` және `.getActions()` әдістерін жаңа адаптерде іске асырып, сервердегі адаптерді ауыстырыңыз. Домен типтері мен score функциялары өзгермейді. Бұл нұсқада серверлік ойын сессиялары сақталмайды; A/B жоспарлары пайдаланушының браузерінде сақталады.
+## Demo walkthrough
+
+1. Open the app. The baseline city score is **52.56**, and the available budget is **100**.
+2. Select the following projects and assign the specified districts:
+
+   | ID | Project | District / scope | Cost |
+   | --- | --- | --- | ---: |
+   | M1 | Dedicated bus lanes | Нұра | 18 |
+   | M5 | Cleaner fuel for private housing | Сарыарқа | 25 |
+   | M7 | School and kindergarten | Нұра | 24 |
+   | M10 | Street lighting and cameras | Нұра | 12 |
+   | M12 | Unified resident requests platform | Whole city | 14 |
+
+3. Check that total cost is **93**, with **7** remaining. Click **«Растау»** (Confirm).
+4. The final score is **55.61**, an improvement of **+3.05**. Нұра’s district score changes from **49.18 → 53.13**. The number of critical metrics falls from **2 → 1**; Нұра’s healthcare metric remains **35**. The M10 + M12 synergy improves Нұра’s street safety.
+5. Save the result in **A**, click **«Жоспарды өзгерту»** (Edit plan), move the school to another district, and confirm again. Save the new result in **B** to compare the plans.
+6. Use the city’s before/after controls to inspect the project changes. **«Қайта бастау»** (Restart) clears the current choices; saved A/B plans have separate delete controls.
+
+A/B plans are saved in the current browser, not in a shared account or server database. Saving or comparing them does not make an AI request.
+
+## Current game rules and scoring
+
+- Spend no more than **100** units; unspent budget gives no score bonus.
+- Select **exactly five distinct projects: one from each of the five categories**.
+- Assign one district to each district-level project. City-level projects affect all five districts and are paid for once.
+- M1 and M3 cannot be combined. M4 + M7 and M5 + M13 cannot share a district.
+- Invalid plans cannot be confirmed; the server independently validates all decisions before calling AI.
+
+Each metric is on a 0–100 scale, where higher is better. Project effects are adjusted for implementation delays over an eight-quarter horizon. Fixed synergy bonuses are then included, and metrics are clamped to 0–100.
+
+```text
+realized project effect = full effect × (8 − delay in quarters) / 8
+
+district score = weighted sum of the district's ten metrics
+city average   = population-weighted average of district scores
+
+final score = 0.7 × city average
+            + 0.3 × lowest district score
+            − number of district metrics strictly below 40
+```
+
+**AI explains the numbers; it does not calculate or change them.** If the provider fails or the key is missing, the API still returns the real simulation result with `analysis.status = "unavailable"`. An AI request times out after 35 seconds; retrying analysis is a user action.
+
+See [scoring and dataset details](docs/scoring.md) and [3D city documentation](docs/city-3d.md).
+
+## Project structure
+
+The stack is **Next.js 14 App Router, React 18, TypeScript, Tailwind CSS, and Three.js**. District and project data live in local JSON files.
+
+```text
+app/page.tsx              Loads the catalog and renders the simulator
+app/api/analyze/route.ts   POST endpoint: validation, scoring, AI explanation
+components/               Simulator, 3D city, district views, A/B comparison
+lib/score.ts              Deterministic game rules and score calculations
+lib/analyze.ts            Coordinates scoring and optional AI analysis
+lib/openai.ts             Server-side AI request and response validation
+lib/data.ts               Local JSON data adapter
+lib/city-*.ts              City geometry, layout, landmarks, and visual state
+data/                     District metrics and the 14-project catalog
+tests/                    Unit tests and desktop/mobile Playwright tests
+docs/                     Scoring reference, 3D documentation, screenshots
+```
 
 ## API
 
-```http
-POST /api/analyze
-Content-Type: application/json
-```
-
-```json
-{
-  "decisions": [
-    { "actionId": "M7", "districtId": "nura" },
-    { "actionId": "M1", "districtId": "nura" },
-    { "actionId": "M10", "districtId": "nura" },
-    { "actionId": "M12" },
-    { "actionId": "M5", "districtId": "saryarka" }
-  ]
-}
-```
-
-Қалалық іс-шарада `districtId` өрісі мүлде берілмейді. Аудандық іс-шарада ол міндетті.
-
-- `200`: `{ result, analysis }`; `result` — сервер есептеген нәтиже. `analysis.status` — `complete` немесе `unavailable`.
-- `400`: қате JSON/өрістер, белгісіз не қайталанған іс-шара, қате аудан, бес шешім талабының бұзылуы, бағыт лимиті, үйлесімсіздік немесе бюджет асуы. AI шақырылмайды.
-- `413`: 4096 таңбадан үлкен сұрау.
-- `500`: сервердің каталог деректерін оқу/есептеу қатесі.
-
-## Тесттер
+Send project IDs and district IDs only. Costs, effects, and scores are read or calculated on the server.
 
 ```bash
-npm test
-npm run typecheck
-npm run build
+curl -X POST http://localhost:3000/api/analyze \
+  -H 'Content-Type: application/json' \
+  -d '{"decisions":[{"actionId":"M1","districtId":"nura"},{"actionId":"M5","districtId":"saryarka"},{"actionId":"M7","districtId":"nura"},{"actionId":"M10","districtId":"nura"},{"actionId":"M12"}]}'
 ```
 
-Браузерлік тесттерге Chromium орнатыңыз, содан кейін өндірістік жинақты жасаңыз:
+Omit `districtId` for city-level projects. District IDs are `esil`, `almaty`, `saryarka`, and `baikonur`, plus `nura`.
+
+| Status | Meaning |
+| --- | --- |
+| `200` | `{ result, analysis }`; AI status is `complete` or `unavailable`. |
+| `400` | Invalid JSON, unexpected fields, or an invalid plan. No AI call is made. |
+| `413` | Request body exceeds 4,096 characters. |
+| `500` | Server-side data loading or simulation failure. |
+
+## Tests
+
+```bash
+npm test                 # Unit tests for rules, scoring, AI handling, and city logic
+npm run typecheck        # TypeScript checks
+npm run build            # Production build and Next.js validation
+```
+
+For desktop and mobile browser tests:
 
 ```bash
 npx playwright install chromium
@@ -210,16 +209,17 @@ npm run build
 npm run test:e2e
 ```
 
-Егер Google Chrome орнатылған болса, Chromium жүктемей-ақ:
+Playwright starts its own production server at `127.0.0.1:3010`; keep that port free. The test server uses an empty API key, so it makes no paid AI requests. Browser-test artifacts are written to `test-results/`.
 
-```bash
-PLAYWRIGHT_CHANNEL=chrome npm run test:e2e
-```
+## Troubleshooting and limitations
 
-Playwright `127.0.0.1:3010` портында уақытша сервер ашады. Бұл порт бос болуы керек. Тест серверінде API кілті бос болады; ақылы сұраулар жасалмайды. AI сәтті жауабы жасанды жауаппен тексеріледі. Компьютер және телефон көріністерінің скриншоттары `test-results/` ішінде жасалады.
+| Problem | What to check |
+| --- | --- |
+| AI analysis unavailable | Check `OPENAI_API_KEY`, API quota, and the allowed `OPENAI_MODEL` values. Restart locally or redeploy after changing variables. The score remains usable. |
+| Vercel builds the wrong app | Select the repository root, not the nested copy of the previous project. |
+| Production server will not start locally | Run `npm run build` before `npm start`. |
+| Port 3000 is busy | Run `npm run dev -- --port 3002` and open `http://localhost:3002`. |
+| 3D city does not render | Enable browser hardware acceleration/WebGL, or use the district information and results without 3D. |
+| Saved A/B plans disappeared | They belong to the browser and origin where they were saved. Clearing browser storage removes them. |
 
-## Нұсқа шектеуі
-
-Техтапсырмаға сай Next.js 14 сақталған. `npm audit` осы ескі major-нұсқаға қатысты upstream осалдықтар көрсетеді; 14.2.35 оларды түгел жаппайды. Бұл нұсқа жергілікті хакатон көрсетіліміне арналған. Ашық production орналастыру алдында қолдауы бар, түзетілген Next.js нұсқасына көшу қажет. PostCSS override-ы бөлек транзитивтік тәуелділікті жаңартады; ол Next.js осалдықтарын түзетпейді.
-
-Бір браузерде A/B сценарийлерін салыстыру бар. Ортақ серверлік команда рейтингі, күтпеген қалалық оқиғаларды модельдеу және презентация генерациясы бұл кезеңге кірмейді.
+This prototype has no accounts, shared leaderboard, server-side saved sessions, random city events, or presentation export. It retains Next.js 14 from the hackathon implementation. Before a long-term public deployment, review `npm audit`, upgrade to a supported patched Next.js version, and rerun the checks; a hosting platform may reject a dependency version with known vulnerabilities. The AI endpoint currently has no authentication or application-level rate limiting.
