@@ -1,0 +1,395 @@
+/* Scoped to the simplified hackathon dashboard; shared/map styles stay intact. */
+.simulation-page .page-heading {
+  margin-bottom: 20px;
+}
+.simulation-page .page-heading p {
+  font-size: 13px;
+  color: #60746b;
+}
+.dataset-notice {
+  display: flex;
+  gap: 13px;
+  align-items: baseline;
+  padding: 13px 16px;
+  margin-bottom: 20px;
+  background: #eef3f0;
+  border: 1px solid #dce7df;
+  border-radius: 9px;
+  color: #5d7266;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.dataset-notice strong {
+  color: #346750;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.dataset-notice p {
+  margin: 0;
+}
+.simulation-page .dashboard-stats {
+  margin-bottom: 28px;
+}
+.simulation-page .stat-card {
+  padding: 20px 22px;
+  box-shadow: none;
+}
+.simulation-page .stat-card::after {
+  display: none;
+}
+.simulation-page .stat-top {
+  font-size: 12px;
+  color: #5f7569;
+}
+.simulation-page .stat-detail {
+  font-size: 11px;
+  color: #697e70;
+}
+.simulation-page .dashboard-layout {
+  gap: 25px;
+  grid-template-columns: minmax(0, 1fr) 304px;
+}
+.simulation-page .section-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 18px;
+}
+.step-label {
+  display: inline-grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  border: 1px solid #d8e6dc;
+  border-radius: 50%;
+  background: #edf4ee;
+  color: #4e7960;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.simulation-page .district-card {
+  border-radius: 10px;
+  padding: 15px 12px;
+  box-shadow: none;
+}
+.simulation-page .district-card.selected {
+  box-shadow: 0 0 0 1px #539c7f;
+}
+.simulation-page .district-card h3 {
+  font-size: 13px;
+}
+.simulation-page .district-status {
+  font-size: 9px;
+  color: #667d6c;
+}
+.simulation-page .district-status.critical-text {
+  color: #91672c;
+}
+.simulation-page .district-details {
+  padding: 21px;
+  box-shadow: none;
+}
+.simulation-page .indicator-label {
+  font-size: 11px;
+  color: #61766b;
+}
+.simulation-page .critical-badge {
+  font-size: 8px;
+}
+.simulation-page .detail-title p {
+  font-size: 11px;
+  color: #687d70;
+}
+.simulation-page .detail-title > .small {
+  color: #687d70;
+}
+.simulation-page .indicators-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 28px;
+}
+.simulation-page .catalog {
+  margin-top: 28px;
+}
+.simulation-page .catalog .section-heading p {
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 520px;
+  color: #62776b;
+}
+.simulation-page .catalog-toolbar {
+  gap: 12px;
+}
+.simulation-page .filter-tabs {
+  width: 100%;
+  gap: 5px;
+}
+.simulation-page .filter-tabs button {
+  font-size: 11px;
+  padding: 9px 12px;
+  background: #fff;
+  border-color: #dfe7e1;
+  color: #62766a;
+}
+.simulation-page .filter-tabs button.active {
+  color: #fff;
+  background: #277d62;
+  border-color: #277d62;
+}
+.simulation-page .filter-tabs button:hover:not(.active) {
+  background: #edf5ef;
+}
+.simulation-page .search-box {
+  flex: 1;
+  max-width: none;
+  min-height: 39px;
+  padding: 9px 12px;
+}
+.simulation-page .search-box input {
+  font-size: 12px;
+}
+.simulation-page .catalog-caption {
+  font-size: 10px;
+  color: #6b7c71;
+}
+.simulation-page .measure-card {
+  padding: 19px;
+  border-radius: 11px;
+  box-shadow: none;
+}
+.simulation-page .measure-card h3 {
+  font-size: 14px;
+  line-height: 1.45;
+}
+.simulation-page .measure-description {
+  font-size: 12px;
+  color: #687c70;
+  line-height: 1.65;
+}
+.simulation-page .measure-meta {
+  font-size: 10px;
+  color: #6c7d72;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.simulation-page .category-label {
+  font-size: 10px;
+  color: #6c7d72;
+}
+.simulation-page .measure-cost {
+  font-size: 19px;
+}
+.simulation-page .measure-cost > span {
+  font-size: 10px;
+  color: #728476;
+}
+.simulation-page .effects {
+  margin-bottom: 16px;
+}
+.simulation-page .effects > span {
+  font-size: 10px;
+  color: #4c7857;
+}
+.simulation-page .district-selector {
+  font-size: 11px;
+  color: #526d59;
+}
+.simulation-page .district-selector select {
+  padding: 10px;
+  font-size: 12px;
+  color: #4b6453;
+  background: #fff;
+}
+.simulation-page .city-wide-note {
+  font-size: 11px;
+  min-height: 60px;
+  color: #5f7b67;
+}
+.simulation-page .button-add {
+  font-size: 12px;
+  min-height: 40px;
+  color: #326d47;
+  background: #f0f6ee;
+}
+.simulation-page .button-add:disabled:not(.added) {
+  opacity: 0.65;
+  color: #647b6a;
+}
+.simulation-page .strategy-panel {
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: none;
+}
+.simulation-page .strategy-title {
+  gap: 8px;
+}
+.simulation-page .strategy-title > .icon-box {
+  display: none;
+}
+.simulation-page .strategy-title h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+.simulation-page .count-pill {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #3f6d4e;
+}
+.simulation-page .strategy-intro {
+  font-size: 11px;
+  color: #6b7e6e;
+  margin: 12px 0 21px;
+}
+.simulation-page .decision-slot {
+  color: #738370;
+  min-height: 66px;
+  font-size: 11px;
+}
+.simulation-page .decision-slot strong {
+  font-size: 11px;
+}
+.simulation-page .decision-slot div > span {
+  font-size: 10px;
+  color: #697c65;
+}
+.simulation-page .icon-button {
+  min-height: 30px;
+  min-width: 27px;
+}
+.simulation-page .budget-summary > div:not(.budget-track) {
+  font-size: 12px;
+  color: #687d6b;
+}
+.simulation-page .budget-summary strong {
+  font-size: 12px;
+}
+.simulation-page .run-button {
+  font-size: 13px;
+  min-height: 45px;
+}
+.simulation-page .run-hint {
+  font-size: 11px;
+  color: #667c67;
+}
+@media (max-width: 1200px) {
+  .simulation-page .dashboard-layout {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 20px;
+  }
+  .simulation-page .district-card {
+    padding: 13px 8px;
+  }
+  .simulation-page .district-card h3 {
+    font-size: 12px;
+  }
+  .simulation-page .district-status {
+    font-size: 8px;
+  }
+  .simulation-page .measure-card {
+    padding: 16px;
+  }
+  .simulation-page .category-label {
+    font-size: 9px;
+  }
+}
+@media (max-width: 1050px) {
+  .simulation-page .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+  .simulation-page .district-status {
+    font-size: 10px;
+  }
+  .simulation-page .district-card {
+    padding: 16px 13px;
+  }
+  .simulation-page .decision-slots {
+    grid-template-columns: 1fr;
+  }
+  .simulation-page .decision-slot {
+    min-height: 61px;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding-right: 30px;
+  }
+  .simulation-page .decision-slot > div {
+    width: auto;
+  }
+  .simulation-page .decision-slot .icon-button {
+    top: 15px;
+  }
+  .simulation-page .strategy-panel .run-button,
+  .simulation-page .budget-summary {
+    max-width: none;
+  }
+}
+@media (max-width: 760px) {
+  .dataset-notice {
+    display: block;
+    font-size: 11px;
+  }
+  .dataset-notice p {
+    margin-top: 4px;
+  }
+  .simulation-page .stat-detail {
+    font-size: 10px;
+  }
+  .simulation-page .stat-card {
+    padding: 16px;
+  }
+  .simulation-page .stat-top {
+    font-size: 11px;
+  }
+  .simulation-page .district-card {
+    padding: 13px 8px;
+  }
+  .simulation-page .district-status {
+    font-size: 8px;
+  }
+  .simulation-page .indicator-label {
+    font-size: 10px;
+  }
+  .simulation-page .filter-tabs button {
+    font-size: 10px;
+    padding: 9px;
+  }
+  .simulation-page .category-label {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .simulation-page .district-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .simulation-page .district-card {
+    padding: 15px;
+  }
+  .simulation-page .district-status {
+    font-size: 10px;
+  }
+  .simulation-page .district-card h3 {
+    font-size: 14px;
+  }
+  .simulation-page .indicators-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .simulation-page .indicator-label {
+    font-size: 11px;
+  }
+  .simulation-page .category-label {
+    display: inline;
+  }
+  .simulation-page .filter-tabs {
+    gap: 6px;
+  }
+  .simulation-page .catalog-caption > span:last-child {
+    max-width: none;
+  }
+  .simulation-page .stat-top {
+    font-size: 10px;
+  }
+}

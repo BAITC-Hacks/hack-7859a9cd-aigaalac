@@ -1,14 +1,23 @@
 @import "tailwindcss";
+
 @theme {
-  --color-teal-700: #13765e;
+  --color-blue-700: #1d4ed8;
   --font-sans: Arial, Helvetica, sans-serif;
 }
+
 :root {
-  --ink: #243a32;
-  --muted: #7b8882;
-  --green: #147d63;
-  --border: #e4eae6;
-  --paper: #f7f9f7;
+  --ink: #172033;
+  --muted: #6b7280;
+
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --blue-light: #eff6ff;
+
+  /* оставляем старое имя, чтобы пока не ломать компоненты */
+  --green: var(--blue);
+
+  --border: #e2e8f0;
+  --paper: #f8fafc;
 }
 * {
   box-sizing: border-box;
@@ -46,7 +55,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid #77bdaa;
+  outline: 3px solid #93c5fd;
   outline-offset: 4px;
 }
 h1,
@@ -105,7 +114,7 @@ a {
   height: 43px;
   display: grid;
   place-items: center;
-  background: #167c64;
+  background: #2563eb;
   color: white;
   border-radius: 12px;
 }
@@ -142,8 +151,8 @@ a {
   background: #f5f8f6;
 }
 .nav-link.active {
-  color: #14765e;
-  background: #eaf4ee;
+  color: #1d4ed8;
+  background: #eff6ff;
   font-weight: 700;
 }
 .active-dot {
@@ -2312,3 +2321,46 @@ tbody tr:last-child th {
   top: 12px;
 }
 
+.game-guide {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  padding: 16px 18px;
+  margin-bottom: 24px;
+
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.game-guide-number {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  border-radius: 8px;
+
+  font-weight: 700;
+}
+
+.game-guide strong {
+  color: #334155;
+  font-size: 12px;
+}
+
+.game-guide p {
+  margin-top: 5px;
+
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.7;
+
+  max-width: 700px;
+}

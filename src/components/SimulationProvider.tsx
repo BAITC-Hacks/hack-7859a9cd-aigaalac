@@ -59,9 +59,20 @@ export function SimulationProvider({
         /* The in-memory session remains usable. */
       }
   }, [ready, decisions, result]);
+  function updateDecisions(next: Decision[]) {
+    setDecisions(next);
+    // Results belong to the strategy that produced them, not a later draft.
+    setResult(null);
+  }
   return (
     <Context.Provider
-      value={{ decisions, result, ready, setDecisions, setResult }}
+      value={{
+        decisions,
+        result,
+        ready,
+        setDecisions: updateDecisions,
+        setResult,
+      }}
     >
       {children}
     </Context.Provider>

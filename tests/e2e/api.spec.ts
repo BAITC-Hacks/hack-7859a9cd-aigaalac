@@ -7,6 +7,10 @@ test("real API mode preserves contracts and recovers from simulation and analysi
 }) => {
   let simulateCalls = 0;
   let analysisCalls = 0;
+  let releaseSimulation!: () => void;
+  const backendResponse = new Promise<void>((resolve) => {
+    releaseSimulation = resolve;
+  });
   const completeResult = { ...mockResult, backendExtra: { preserved: true } };
   await page.route("**/api/simulate", async (route) => {
     expect(route.request().postDataJSON()).toEqual({
@@ -19,6 +23,7 @@ test("real API mode preserves contracts and recovers from simulation and analysi
       ],
     });
     simulateCalls++;
+    if (simulateCalls === 2) await backendResponse;
     await route.fulfill({
       status: simulateCalls === 1 ? 503 : 200,
       json:
@@ -52,6 +57,14 @@ test("real API mode preserves contracts and recovers from simulation and analysi
   await page
     .getByRole("button", { name: "Run Simulation", exact: true })
     .click();
+  await expect(
+    page.getByRole("button", { name: "Running simulation…" }),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Remove Digital city services" }),
+  ).toBeDisabled();
+  await expect(page).toHaveURL(/\/simulation$/);
+  releaseSimulation();
   await expect(page).toHaveURL(/\/results$/);
   await expect(page.getByRole("alert")).toContainText(
     "Analysis temporarily unavailable",

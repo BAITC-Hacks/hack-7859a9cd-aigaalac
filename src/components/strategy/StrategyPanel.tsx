@@ -6,6 +6,7 @@ export default function StrategyPanel({
   decisions,
   spent,
   busy,
+  restoring = false,
   error,
   onRemove,
   onRun,
@@ -13,22 +14,29 @@ export default function StrategyPanel({
   decisions: Decision[];
   spent: number;
   busy: boolean;
+  restoring?: boolean;
   error: string | null;
   onRemove: (index: number) => void;
   onRun: () => void;
 }) {
   return (
-    <aside className="strategy-panel">
+    <aside className="strategy-panel" aria-label="Your strategy">
       <div className="strategy-title">
         <span className="icon-box">
           <Layers3 size={20} />
         </span>
-        <h2>Your strategy</h2>
-        <span className="count-pill">
+        <h2>
+          <span className="step-label">3</span> Review & run
+        </h2>
+        <span
+          className="count-pill"
+          aria-label="Decision count"
+          aria-live="polite"
+        >
           {decisions.length}/{DECISION_LIMIT}
         </span>
       </div>
-      <p className="strategy-intro">Five decisions to make a difference.</p>
+      <p className="strategy-intro">Review your decisions before running.</p>
       <div className="decision-slots">
         {Array.from({ length: DECISION_LIMIT }, (_, index) => {
           const d = decisions[index];
@@ -50,7 +58,7 @@ export default function StrategyPanel({
                   </div>
                   <button
                     className="icon-button"
-                    disabled={busy}
+                    disabled={busy || restoring}
                     onClick={() => onRemove(index)}
                     aria-label={`Remove ${m.name}`}
                   >
@@ -73,7 +81,7 @@ export default function StrategyPanel({
           </strong>
         </div>
         <div className="budget-track">
-          <span style={{ width: `${spent}%` }} />
+          <span style={{ width: `${(spent / CITY_BUDGET) * 100}%` }} />
         </div>
         <div>
           <span>Remaining budget</span>
@@ -83,11 +91,16 @@ export default function StrategyPanel({
       <button
         className="button button-primary run-button"
         disabled={
-          decisions.length !== DECISION_LIMIT || spent > CITY_BUDGET || busy
+          decisions.length !== DECISION_LIMIT ||
+          spent > CITY_BUDGET ||
+          busy ||
+          restoring
         }
         onClick={onRun}
       >
-        {busy ? (
+        {restoring ? (
+          "Restoring strategy…"
+        ) : busy ? (
           <>
             <LoaderCircle className="spin" size={17} /> Running simulation…
           </>
@@ -107,13 +120,6 @@ export default function StrategyPanel({
           {error}
         </p>
       )}
-      <div className="strategy-tip">
-        <strong>A mayor’s perspective</strong>
-        <p>
-          Look for the gaps. Supporting a district’s weakest indicators can make
-          a real difference.
-        </p>
-      </div>
     </aside>
   );
 }

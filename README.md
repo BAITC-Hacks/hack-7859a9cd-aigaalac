@@ -11,7 +11,7 @@ npm run dev
 
 Open http://localhost:3000. Validate with `npm run typecheck`, `npm run build`, and `npm test`. Dev and build use Next.js’s supported Webpack bundler because this workspace blocks Turbopack’s CSS worker port.
 
-Optional browser tests: `npm run test:e2e` (requires local Google Chrome). They run demo and live-API modes on ports 3100 and 3101, intercepting API calls to check payloads and error recovery. These tests have been added but have not been executed in this session because browser-test permission was declined.
+Optional browser tests: `npm run test:e2e` (requires local Google Chrome). They run demo and live-API modes on ports 3100 and 3101, intercepting API calls to check payloads and error recovery. They cover district navigation, all filters, search, fixed-cost selection, budget limits, exactly five decisions, refresh, stale-result clearing, and request/error handling.
 
 ## Pages and components
 
@@ -52,7 +52,7 @@ A user can select each initiative once, choose exactly five within 100 credits, 
 
 ## 3D city explorer and themes
 
-The landing page and dashboard include a real geographic Astana map with MapLibre GL, OpenFreeMap vector tiles, and OpenStreetMap building footprints/heights. Drag to pan, scroll to zoom, and right-drag to rotate. The 2D/3D toggle, reset, and all-district overview provide camera shortcuts. Hover buildings for mapped details; hover, focus, or click district pins/buttons for simulator indicators. Clicking a district on the dashboard synchronizes the existing district cards and details.
+The landing page includes a real geographic Astana map with MapLibre GL, OpenFreeMap vector tiles, and OpenStreetMap building footprints/heights. Drag to pan, scroll to zoom, and right-drag to rotate. The 2D/3D toggle, reset, and all-district overview provide camera shortcuts. Hover buildings for mapped details; hover, focus, or click district pins/buttons for simulator indicators. The simulation page temporarily omits the map and uses the five district cards as its main navigation. All map components, styling, coordinates, and layer code are preserved unchanged for restoration.
 
 - Map component and controls: `src/components/map/`
 - Map camera, styles, and approximate district focus coordinates: `src/data/map.ts`
@@ -63,8 +63,18 @@ The landing page and dashboard include a real geographic Astana map with MapLibr
 
 District pins are demo focus points, not official district boundaries. Map tiles require an internet connection and the map requires WebGL. District information remains usable if the map fails. No API key is needed. Map source documentation: [OpenFreeMap](https://openfreemap.org/quick_start/) and [MapLibre 3D buildings](https://maplibre.org/maplibre-gl-js/docs/examples/display-buildings-in-3d/).
 
-The header sun/moon button switches light/dark mode across all pages, chart colors, and map tiles. It initially follows the system preference and remembers explicit choices in local storage.
+The demo currently uses a fixed light theme on all pages. The header theme toggle is hidden. Theme components, dark styles, and saved preferences are retained. To restore switching later, remove `forcedTheme="light"` from `app/layout.tsx`, restore the `themeInitScript` setup there, and render `ThemeToggle` in `AppShell.tsx`.
 
 MapLibre v6 worker assets are copied from the installed package into `public/maplibre/` automatically by `predev` and `prebuild`. These generated files are ignored by Git. Deploy the `public/` assets along with the Next.js build.
 
-Run `npm run test:map` for focused Chrome checks covering theme persistence, district hover/selection, actual 3D map loading, camera controls, building hover information, and mobile/offline fallback.
+Run `npm run test:map` for focused Chrome checks covering the retained landing-page map, district hover/selection, actual 3D map loading, camera controls, building hover information, light-theme lock, and mobile/offline fallback.
+
+## Current hackathon demo flow
+
+`100 credits → inspect district cards → choose initiatives and required target districts → review exactly five decisions → Run Simulation → results`
+
+Costs are fixed catalog values; there is no manual allocation control. Editing a strategy clears its previous simulation result so a new draft cannot accidentally display an old outcome. Session restoration is shown separately from a running simulation.
+
+All original demo values are unchanged: district QoL/indicators and initial city QoL in `src/data/districts.ts`, initiative costs/lag/effects in `src/data/measures.ts`, and fixed outcome/analysis fixtures in `src/data/mockResults.ts`. The 100-credit limit, five-decision requirement, and five simulator districts are the specified game setup. Budget and decision counters reflect the user's actual selections from that provisional catalog. In real API mode, the frontend waits for `/api/simulate` to return the backend-calculated result before navigating to `/results`.
+
+Simulation-only visual styles live in `src/app/simulation/simulation.css`. To restore the dashboard map later, re-import `AstanaMap` in the simulation page and pass its existing `districtId`/`setDistrictId` state as `selectedDistrictId`/`onDistrictSelect`.

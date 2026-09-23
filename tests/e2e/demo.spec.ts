@@ -13,14 +13,12 @@ test("five targeted decisions, budget, removal, result and refresh", async ({
   const run = page.getByRole("button", { name: "Run Simulation", exact: true });
   await expect(run).toBeDisabled();
   await expect(page.getByText("Critical", { exact: true })).toBeVisible();
-  const bus = page
-    .locator("article")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Smart bus network",
-        exact: true,
-      }),
-    });
+  const bus = page.locator("article").filter({
+    has: page.getByRole("heading", {
+      name: "Smart bus network",
+      exact: true,
+    }),
+  });
   await expect(
     bus.getByRole("button", { name: "Add to strategy" }),
   ).toBeDisabled();
@@ -68,6 +66,17 @@ test("five targeted decisions, budget, removal, result and refresh", async ({
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "A new outlook for Astana." }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Refine your strategy" }).click();
+  await expect(page.getByLabel("Decision count")).toHaveText("5/5");
+  await page
+    .getByRole("button", { name: "Remove Digital city services" })
+    .click();
+  await page
+    .getByRole("link", { name: "Simulation results", exact: true })
+    .click();
+  await expect(
+    page.getByRole("link", { name: "Build your strategy" }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });

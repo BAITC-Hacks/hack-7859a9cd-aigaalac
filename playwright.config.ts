@@ -12,7 +12,7 @@ export default defineConfig({
   projects: [
     {
       name: "demo",
-      testMatch: "demo.spec.ts",
+      testMatch: ["demo.spec.ts", "dashboard.spec.ts"],
       use: { baseURL: "http://127.0.0.1:3100" },
     },
     {

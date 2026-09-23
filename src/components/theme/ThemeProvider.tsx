@@ -12,9 +12,21 @@ export const THEME_STORAGE_KEY = "akim-theme";
 // Runs before paint. Only a fixed theme enum is read; no stored text is rendered.
 export const themeInitScript = `(function(){try{var t=localStorage.getItem('akim-theme');document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch{document.documentElement.dataset.theme='light'}})()`;
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
+export function ThemeProvider({
+  children,
+  forcedTheme,
+}: {
+  children: React.ReactNode;
+  forcedTheme?: Theme;
+}) {
+  const [theme, setTheme] = useState<Theme>(forcedTheme ?? "light");
   useEffect(() => {
+    // Temporary demo lock; stored preferences are preserved for later restoration.
+    if (forcedTheme) {
+      document.documentElement.dataset.theme = forcedTheme;
+      setTheme(forcedTheme);
+      return;
+    }
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const sync = () => {
       let saved: string | null = null;
@@ -42,9 +54,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       media.removeEventListener("change", sync);
       window.removeEventListener("storage", onStorage);
     };
-  }, []);
+  }, [forcedTheme]);
 
   function toggleTheme() {
+    if (forcedTheme) return;
     const next =
       document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;

@@ -10,8 +10,7 @@ import {
   MapPinned,
   Sparkles,
 } from "lucide-react";
-import ThemeToggle from "@/components/theme/ThemeToggle";
-import { USE_MOCK_API } from "@/lib/api/client";
+
 const navigation = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
   { href: "/simulation", label: "City management", icon: MapPinned },
@@ -76,10 +75,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </strong>
           </div>
           <div className="topbar-right">
-            <ThemeToggle />
             <span className="mode-badge">
               <span />
-              {USE_MOCK_API ? "Demo mode" : "Live API"}
+              Astana · City Simulator
             </span>
             <div className="avatar" title="Your mayor's workspace">
               AK

@@ -1,14 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ChartNoAxesCombined,
-  Coins,
-  Layers3,
-  Search,
-  SlidersHorizontal,
-} from "lucide-react";
-import AstanaMap from "@/components/map/AstanaMap";
+import { ChartNoAxesCombined, Coins, Layers3, Search } from "lucide-react";
 import { StatCard } from "@/components/ui/StatCard";
 import DistrictCard from "@/components/districts/DistrictCard";
 import DistrictDetails from "@/components/districts/DistrictDetails";
@@ -23,7 +16,7 @@ import {
 } from "@/data/districts";
 import { categories, measures } from "@/data/measures";
 import { simulateStrategy } from "@/lib/api/simulation";
-import { USE_MOCK_API } from "@/lib/api/client";
+
 import type { Category, Decision } from "@/types";
 export default function SimulationPage() {
   const router = useRouter();
@@ -43,7 +36,9 @@ export default function SimulationPage() {
   const filtered = measures.filter(
     (m) =>
       (category === "All initiatives" || m.category === category) &&
-      `${m.name} ${m.description}`.toLowerCase().includes(query.toLowerCase()),
+      `${m.name} ${m.description}`
+        .toLowerCase()
+        .includes(query.trim().toLowerCase()),
   );
   function add(decision: Decision) {
     const measure = measures.find((m) => m.id === decision.measureId);
@@ -71,7 +66,12 @@ export default function SimulationPage() {
     setError(null);
   }
   async function run() {
-    if (busy || decisions.length !== DECISION_LIMIT || spent > CITY_BUDGET)
+    if (
+      !ready ||
+      busy ||
+      decisions.length !== DECISION_LIMIT ||
+      spent > CITY_BUDGET
+    )
       return;
     setBusy(true);
     setError(null);
@@ -88,23 +88,43 @@ export default function SimulationPage() {
     }
   }
   return (
-    <div className="page-content">
+    <div className="page-content simulation-page">
       <div className="page-heading">
         <div>
-          <div className="eyebrow">THE CITY IS IN YOUR HANDS</div>
+          <div className="eyebrow">Аким на 5 часов</div>
           <h1>City management</h1>
           <p>
-            Understand the needs. Choose your initiatives. Build a better
-            Astana.
+            Choose exactly {DECISION_LIMIT} initiatives within {CITY_BUDGET}{" "}
+            credits. Every initiative has a fixed cost.
           </p>
         </div>
-        <span className="round-badge">
-          ROUND 01 <span>/ 5 HOURS</span>
+      </div>
+
+      <div className="game-guide">
+        <div className="game-guide-number">?</div>
+
+        <div>
+          <strong>Как управлять городом?</strong>
+          <p>
+            У вас есть 100 единиц бюджета и 5 решений.
+            Изучите районы, выберите инициативы и укажите,
+            где их реализовать. После пяти решений запустите симуляцию.
+          </p>
+        </div>
+      </div>
+
+      <div className="section-heading compact">
+        <h2>
+          <span className="step-label">1</span> Выберите район
+        </h2>
+
+        <span className="muted small">
+          Нажмите на район, чтобы посмотреть его показатели
         </span>
       </div>
       <div className="stats-grid dashboard-stats">
         <StatCard
-          label="Available budget"
+          label="Budget remaining"
           value={CITY_BUDGET - spent}
           suffix={`/ ${CITY_BUDGET} credits`}
           detail={`${spent} credits allocated to your strategy`}
@@ -112,8 +132,8 @@ export default function SimulationPage() {
         />
         <StatCard
           label="Decisions selected"
-          value={`0${decisions.length}`}
-          suffix={`/ 0${DECISION_LIMIT}`}
+          value={decisions.length}
+          suffix={`/ ${DECISION_LIMIT}`}
           detail="Choose exactly five initiatives"
           icon={Layers3}
         />
@@ -121,25 +141,28 @@ export default function SimulationPage() {
           label="Current quality of life"
           value={INITIAL_QOL}
           suffix="/ 100"
-          detail="City-wide baseline before your decisions"
+          detail="Demo city-wide baseline"
           icon={ChartNoAxesCombined}
           accent
         />
       </div>
-      <AstanaMap
-        selectedDistrictId={districtId}
-        onDistrictSelect={setDistrictId}
-      />
+
+
+
       <div className="dashboard-layout">
         <div className="dashboard-main">
           <section>
             <div className="section-heading compact">
               <h2>
-                Your districts <span className="heading-count">05</span>
+                <span className="step-label">1</span> Inspect districts
               </h2>
               <span className="muted small">Select a district to explore</span>
             </div>
-            <div className="district-grid">
+            <div
+              className="district-grid"
+              role="group"
+              aria-label="District navigation"
+            >
               {districts.map((d) => (
                 <DistrictCard
                   key={d.id}
@@ -154,13 +177,22 @@ export default function SimulationPage() {
           <section className="catalog">
             <div className="section-heading compact">
               <div>
-                <h2>Initiative catalog</h2>
-                <p>Small actions. City-wide possibilities.</p>
+                <h2>
+                  <span className="step-label">2</span> Выберите инициативы
+                </h2>
+
+                <p>
+                  Выберите инициативу и район, где хотите её реализовать.
+                  Стоимость автоматически вычитается из бюджета.
+                </p>
               </div>
-              <SlidersHorizontal size={20} className="muted" />
             </div>
             <div className="catalog-toolbar">
-              <div className="filter-tabs" aria-label="Filter initiatives">
+              <div
+                className="filter-tabs"
+                role="group"
+                aria-label="Filter initiatives"
+              >
                 {(["All initiatives", ...categories] as const).map((c) => (
                   <button
                     key={c}
@@ -184,7 +216,7 @@ export default function SimulationPage() {
             </div>
             <div className="catalog-caption">
               <span>{filtered.length} initiatives available</span>
-              <span>Effects shown are catalog estimates</span>
+              <span>Fixed costs · demo effects</span>
             </div>
             <div className="measure-grid">
               {filtered.map((m) => (
@@ -221,23 +253,16 @@ export default function SimulationPage() {
           <StrategyPanel
             decisions={decisions}
             spent={spent}
-            busy={busy || !ready}
+            busy={busy}
+            restoring={!ready}
             error={error}
             onRemove={(i) => {
+              if (!ready || busy) return;
               setDecisions(decisions.filter((_, index) => index !== i));
               setError(null);
             }}
             onRun={run}
           />
-          {USE_MOCK_API && (
-            <div className="demo-note">
-              <span className="demo-dot" />
-              <p>
-                <strong>You’re in demo mode</strong>Results and analysis use a
-                fixed example, independent of your selections.
-              </p>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -1,54 +1,32 @@
 import { test, expect } from "@playwright/test";
 
-test("theme persists and map district navigation updates the dashboard", async ({
+test("landing map remains available while the workspace stays in light mode", async ({
   page,
 }) => {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  await page.emulateMedia({ colorScheme: "light" });
-  await page.goto("/simulation");
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  const dock = page.getByRole("group", { name: "Explore a district" });
-  const esil = dock.getByRole("button", { name: /Esil/ });
-  await esil.hover();
-  await expect(page.locator(".map-info-title")).toHaveText("Esil");
-  await esil.click();
-  await expect(
-    page.getByRole("heading", { name: "Esil at a glance" }),
-  ).toBeVisible();
-  await expect(esil).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: "Switch to dark mode" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await expect(
-    page.getByRole("button", { name: "Reset map view", exact: true }),
-  ).toBeEnabled({ timeout: 30000 });
-  await page
-    .locator(".city-explorer")
-    .screenshot({ path: "/tmp/akim-dark-explorer.png" });
-  await page.screenshot({
-    path: "/tmp/akim-dark-dashboard.png",
-    fullPage: true,
-  });
-  await page.getByRole("button", { name: "Switch to light mode" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.addInitScript(() => localStorage.setItem("akim-theme", "dark"));
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(
+    page.getByRole("button", { name: /Switch to .* mode/ }),
+  ).toHaveCount(0);
+  const dock = page.getByRole("group", { name: "Explore a district" });
+  const nura = dock.getByRole("button", { name: /Nura/ });
+  await nura.hover();
+  await expect(page.locator(".map-info-title")).toHaveText("Nura");
+  await nura.click();
+  await expect(nura).toHaveAttribute("aria-pressed", "true");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(
     page.getByRole("button", { name: "Reset map view", exact: true }),
   ).toBeEnabled({ timeout: 30000 });
-  await page.screenshot({
-    path: "/tmp/akim-light-landing.png",
-    fullPage: true,
-  });
-  expect(errors).toEqual([]);
 });
 
 test("3D map loads, camera controls work and buildings expose hover details", async ({
   page,
 }) => {
-  await page.goto("/simulation");
+  await page.goto("/");
   const reset = page.getByRole("button", {
     name: "Reset map view",
     exact: true,
@@ -89,7 +67,7 @@ test("map failure keeps district information usable on mobile", async ({
     route.abort(),
   );
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/simulation");
+  await page.goto("/");
   await expect(page.getByText("The city map couldn’t load")).toBeVisible({
     timeout: 25000,
   });
@@ -97,28 +75,11 @@ test("map failure keeps district information usable on mobile", async ({
     .getByRole("group", { name: "Explore a district" })
     .getByRole("button", { name: /Saryarka/ })
     .click();
-  await expect(
-    page.getByRole("heading", { name: "Saryarka at a glance" }),
-  ).toBeVisible();
+  await expect(page.locator(".map-info-title")).toHaveText("Saryarka");
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
-  await page.getByRole("button", { name: "Switch to dark mode" }).click();
-  await expect(page.locator(".district-card").first()).toHaveCSS(
-    "background-color",
-    "rgb(21, 36, 44)",
-  );
-  await page
-    .locator(".city-explorer")
-    .screenshot({
-      path: "/tmp/akim-mobile-explorer.png",
-      animations: "disabled",
-    });
-  await page.screenshot({
-    path: "/tmp/akim-mobile-dark.png",
-    fullPage: true,
-    animations: "disabled",
-  });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });

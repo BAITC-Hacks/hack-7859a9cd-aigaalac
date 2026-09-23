@@ -3,10 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "@/app/globals.css";
 import "@/app/theme.css";
 import "@/components/map/map.css";
-import {
-  ThemeProvider,
-  themeInitScript,
-} from "@/components/theme/ThemeProvider";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { AppShell } from "@/components/layout/AppShell";
 import { SimulationProvider } from "@/components/SimulationProvider";
 export const metadata: Metadata = {
@@ -19,15 +16,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
+    <html lang="en" data-theme="light">
       <body>
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
-        <ThemeProvider>
+        <ThemeProvider forcedTheme="light">
           <SimulationProvider>
             <AppShell>{children}</AppShell>
           </SimulationProvider>
