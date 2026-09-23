@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.js",
+    "test": "node --test tests/*.test.js tests/*.test.ts",
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
@@ -13,6 +13,9 @@
     "test:map": "playwright test -c playwright.map.config.ts",
     "predev": "node scripts/prepare-map-assets.mjs",
     "prebuild": "node scripts/prepare-map-assets.mjs"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   },
   "dependencies": {
     "lucide-react": "^1.47.0",

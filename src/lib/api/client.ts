@@ -1,4 +1,6 @@
-export const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK_API !== "false";
+// Compatibility flag: only enables a clearly labelled, non-AI analysis preview.
+// Simulation always uses the authoritative server calculation.
+export const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
 export async function postJSON(path: string, body: unknown): Promise<unknown> {
   const response = await fetch(path, {
     method: "POST",

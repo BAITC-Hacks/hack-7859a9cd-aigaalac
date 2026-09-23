@@ -79,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <ThemeToggle />
             <span className="mode-badge">
               <span />
-              {USE_MOCK_API ? "Demo mode" : "Live API"}
+              {USE_MOCK_API ? "AI preview" : "Live API"}
             </span>
             <div className="avatar" title="Your mayor's workspace">
               AK

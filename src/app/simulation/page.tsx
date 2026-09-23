@@ -24,6 +24,7 @@ import {
 import { categories, measures } from "@/data/measures";
 import { simulateStrategy } from "@/lib/api/simulation";
 import { USE_MOCK_API } from "@/lib/api/client";
+import { validateDecisions } from "@/lib/simulation/validator";
 import type { Category, Decision } from "@/types";
 export default function SimulationPage() {
   const router = useRouter();
@@ -46,33 +47,23 @@ export default function SimulationPage() {
       `${m.name} ${m.description}`.toLowerCase().includes(query.toLowerCase()),
   );
   function add(decision: Decision) {
-    const measure = measures.find((m) => m.id === decision.measureId);
-    if (
-      !ready ||
-      busy ||
-      !measure ||
-      decisions.length >= DECISION_LIMIT ||
-      spent + measure.cost > CITY_BUDGET ||
-      decisions.some((d) => d.measureId === decision.measureId)
-    )
+    if (!ready || busy) return;
+    const next = [...decisions, decision];
+    const validation = validateDecisions(next, { requireComplete: false });
+    if (!validation.valid) {
+      setError(validation.errors.join(" "));
       return;
-    if (
-      measure.scope === "district" &&
-      !districts.some((d) => d.id === decision.districtId)
-    )
-      return;
-    setDecisions([
-      ...decisions,
-      {
-        measureId: measure.id,
-        districtId: measure.scope === "city" ? null : decision.districtId,
-      },
-    ]);
+    }
+    setDecisions(next);
     setError(null);
   }
   async function run() {
-    if (busy || decisions.length !== DECISION_LIMIT || spent > CITY_BUDGET)
+    if (busy || !ready) return;
+    const validation = validateDecisions(decisions);
+    if (!validation.valid) {
+      setError(validation.errors.join(" "));
       return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -119,7 +110,7 @@ export default function SimulationPage() {
         />
         <StatCard
           label="Current quality of life"
-          value={INITIAL_QOL}
+          value={INITIAL_QOL.toFixed(2)}
           suffix="/ 100"
           detail="City-wide baseline before your decisions"
           icon={ChartNoAxesCombined}
@@ -155,7 +146,9 @@ export default function SimulationPage() {
             <div className="section-heading compact">
               <div>
                 <h2>Initiative catalog</h2>
-                <p>Small actions. City-wide possibilities.</p>
+                <p>
+                  14 initiatives · 5 directions · 8-quarter horizon (2 years).
+                </p>
               </div>
               <SlidersHorizontal size={20} className="muted" />
             </div>
@@ -184,7 +177,7 @@ export default function SimulationPage() {
             </div>
             <div className="catalog-caption">
               <span>{filtered.length} initiatives available</span>
-              <span>Effects shown are catalog estimates</span>
+              <span>Full effects before implementation lag</span>
             </div>
             <div className="measure-grid">
               {filtered.map((m) => (
@@ -233,8 +226,9 @@ export default function SimulationPage() {
             <div className="demo-note">
               <span className="demo-dot" />
               <p>
-                <strong>You’re in demo mode</strong>Results and analysis use a
-                fixed example, independent of your selections.
+                <strong>AI preview mode</strong>Scores use the full dataset and
+                your decisions. The explanation is a rules-based summary, not an
+                AI response.
               </p>
             </div>
           )}

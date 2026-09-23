@@ -3,9 +3,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { Decision, SimulationResult } from "@/types";
 import { isSimulationResult } from "@/lib/api/simulation";
 import { USE_MOCK_API } from "@/lib/api/client";
-import { measures } from "@/data/measures";
-import { CITY_BUDGET, DECISION_LIMIT, districts } from "@/data/districts";
-const key = `akim-session-${USE_MOCK_API ? "demo" : "live"}-v1`;
+import { DATASET_VERSION } from "@/data/districts";
+import { validateDecisions } from "@/lib/simulation/validator";
+const key = `akim-session-${DATASET_VERSION}-${USE_MOCK_API ? "preview" : "live"}-v2`;
 type Session = {
   decisions: Decision[];
   result: SimulationResult | null;
@@ -15,36 +15,30 @@ type Session = {
 };
 const Context = createContext<Session | null>(null);
 function validDecisions(value: unknown): value is Decision[] {
-  if (!Array.isArray(value) || value.length > DECISION_LIMIT) return false;
-  const ids = new Set<string>();
-  let spent = 0;
-  return value.every((d) => {
-    const m = measures.find((m) => m.id === d?.measureId);
-    if (!m || ids.has(m.id)) return false;
-    ids.add(m.id);
-    spent += m.cost;
-    return (
-      spent <= CITY_BUDGET &&
-      (m.scope === "city"
-        ? d.districtId === null
-        : districts.some((x) => x.id === d.districtId))
-    );
-  });
+  return validateDecisions(value, { requireComplete: false }).valid;
 }
 export function SimulationProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [decisions, setDecisions] = useState<Decision[]>([]);
+  const [decisions, setStoredDecisions] = useState<Decision[]>([]);
   const [result, setResult] = useState<SimulationResult | null>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     try {
       const saved = JSON.parse(sessionStorage.getItem(key) || "null");
       if (saved && validDecisions(saved.decisions)) {
-        setDecisions(saved.decisions);
-        if (isSimulationResult(saved.result)) setResult(saved.result);
+        setStoredDecisions(saved.decisions);
+        const complete = validateDecisions(saved.decisions);
+        if (
+          complete.valid &&
+          isSimulationResult(saved.result) &&
+          JSON.stringify(complete.decisions) ===
+            JSON.stringify(saved.result.decisions)
+        ) {
+          setResult(saved.result);
+        }
       }
     } catch {
       /* Unavailable or outdated session storage: start fresh. */
@@ -59,6 +53,10 @@ export function SimulationProvider({
         /* The in-memory session remains usable. */
       }
   }, [ready, decisions, result]);
+  function setDecisions(next: Decision[]) {
+    setStoredDecisions(next);
+    setResult(null);
+  }
   return (
     <Context.Provider
       value={{ decisions, result, ready, setDecisions, setResult }}

@@ -906,7 +906,17 @@ h1 {
   background: #fcf0eb;
   color: #c9977d;
 }
-.category-infrastructure {
+.simulation-details .indicator-breakdown {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.indicator-breakdown summary { cursor: pointer; font-weight: 600; }
+.effect-trace { padding-left: 20px; }
+.effect-trace li { margin: 12px 0; }
+.effect-trace span { display: block; margin-top: 5px; font-size: 13px; }
+.simulation-details h3 { margin-top: 24px; }
+.category-services,
+.category-safety {
   background: #f1eef8;
   color: #9c8bb1;
 }
@@ -2311,4 +2321,3 @@ tbody tr:last-child th {
 .skip-link:focus {
   top: 12px;
 }
-

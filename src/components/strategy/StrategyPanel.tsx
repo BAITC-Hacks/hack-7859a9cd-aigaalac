@@ -28,7 +28,10 @@ export default function StrategyPanel({
           {decisions.length}/{DECISION_LIMIT}
         </span>
       </div>
-      <p className="strategy-intro">Five decisions to make a difference.</p>
+      <p className="strategy-intro">
+        Exactly five unique initiatives. At most two per direction. Unspent
+        credits give no bonus.
+      </p>
       <div className="decision-slots">
         {Array.from({ length: DECISION_LIMIT }, (_, index) => {
           const d = decisions[index];
@@ -110,8 +113,9 @@ export default function StrategyPanel({
       <div className="strategy-tip">
         <strong>A mayor’s perspective</strong>
         <p>
-          Look for the gaps. Supporting a district’s weakest indicators can make
-          a real difference.
+          M1 and M3 cannot be combined. M4 + M7 and M5 + M13 cannot target the
+          same district. Supporting indicators below 40 also removes critical
+          penalties.
         </p>
       </div>
     </aside>

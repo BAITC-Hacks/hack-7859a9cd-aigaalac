@@ -8,15 +8,20 @@ import {
   HeartPulse,
   Leaf,
   Plus,
+  ShieldCheck,
   Wrench,
 } from "lucide-react";
 import type { Decision, Measure } from "@/types";
 import DistrictSelector from "./DistrictSelector";
+import { HORIZON_QUARTERS } from "@/data/districts";
+import { INDICATOR_LABELS } from "@/data/indicators";
+import type { IndicatorId } from "@/types";
 const icons = {
   Transport: BusFront,
   Environment: Leaf,
   Social: HeartPulse,
-  Infrastructure: Wrench,
+  Safety: ShieldCheck,
+  Services: Wrench,
 };
 export default function MeasureCard({
   measure,
@@ -51,14 +56,19 @@ export default function MeasureCard({
         ? "Insufficient budget"
         : "Add to strategy";
   return (
-    <article className={`measure-card ${selected ? "is-added" : ""}`}>
+    <article
+      data-measure-id={measure.id}
+      className={`measure-card ${selected ? "is-added" : ""}`}
+    >
       <div className="measure-top">
         <span
           className={`category-icon category-${measure.category.toLowerCase()}`}
         >
           <Icon size={21} />
         </span>
-        <span className="category-label">{measure.category}</span>
+        <span className="category-label">
+          {measure.id} · {measure.category}
+        </span>
         <span className="measure-cost">
           {measure.cost}
           <span> credits</span>
@@ -69,7 +79,7 @@ export default function MeasureCard({
       <div className="measure-meta">
         <span>
           <Clock3 size={13} />
-          {measure.lag} lag
+          {measure.lag} quarter{measure.lag === 1 ? "" : "s"} lag
         </span>
         <span>
           <Globe2 size={13} />
@@ -77,10 +87,18 @@ export default function MeasureCard({
         </span>
       </div>
       <div className="effects">
-        {measure.effects.map((effect) => (
-          <span key={effect}>{effect}</span>
+        {Object.entries(measure.effects).map(([key, effect]) => (
+          <span key={key} title={INDICATOR_LABELS[key as IndicatorId]}>
+            {key} {effect >= 0 ? "+" : ""}
+            {effect}
+          </span>
         ))}
       </div>
+      <p className="small muted">
+        Full effects above ·{" "}
+        {((HORIZON_QUARTERS - measure.lag) / HORIZON_QUARTERS) * 100}% realized
+        over {HORIZON_QUARTERS} quarters.
+      </p>
       <div className="measure-actions">
         {measure.scope === "district" ? (
           <DistrictSelector

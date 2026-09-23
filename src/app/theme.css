@@ -290,7 +290,8 @@ body {
   background: #443830;
   color: #deb098;
 }
-[data-theme="dark"] .category-infrastructure {
+[data-theme="dark"] .category-services,
+[data-theme="dark"] .category-safety {
   background: #363247;
   color: #bba8d7;
 }
