@@ -1,4 +1,4 @@
-import { adviseDistrict } from '../../../../lib/ai/analyst.js';
+import { adviseDistrict } from '../../../lib/ai/analyst.js';
 
 export async function POST(request) {
   try {

@@ -1,0 +1,3 @@
+import type { SimulationResult } from "@/types";
+import { districts } from "@/data/districts";
+export default function DistrictComparison({ result }: { result: SimulationResult }) { return <section className="panel"><div className="section-heading compact"><h2>District comparison</h2><span className="muted small">Quality of life / 100</span></div><div className="table-wrapper"><table><thead><tr><th>District</th><th>Before</th><th>After</th></tr></thead><tbody>{districts.map(d => <tr key={d.id}><th scope="row"><span className="table-district-dot"/>{d.name}</th><td>{result.districtsBefore[d.id]?.score.toFixed(2) ?? "—"}</td><td className="teal"><strong>{result.districtsAfter[d.id]?.score.toFixed(2) ?? "—"}</strong></td></tr>)}</tbody></table></div></section>; }

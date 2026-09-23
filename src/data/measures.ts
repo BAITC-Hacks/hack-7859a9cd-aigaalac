@@ -1,0 +1,155 @@
+import type { Category, Measure } from "@/types";
+export const categories: Category[] = ["Transport", "Environment", "Social", "Infrastructure"];
+// Display-only demo effects; the backend owns all simulation calculations.
+export const measures: Measure[] = [
+  {
+    "id": "M1",
+    "name": "Smart bus network",
+    "description": "Connect neighborhoods with more reliable public transport.",
+    "category": "Transport",
+    "cost": 20,
+    "lag": "1 hour",
+    "scope": "district",
+    "effects": [
+      "Transport +8",
+      "Environment +2"
+    ]
+  },
+  {
+    "id": "M2",
+    "name": "Neighborhood green spaces",
+    "description": "Bring parks and shaded public spaces closer to home.",
+    "category": "Environment",
+    "cost": 15,
+    "lag": "2 hours",
+    "scope": "district",
+    "effects": [
+      "Environment +10",
+      "Infrastructure +2"
+    ]
+  },
+  {
+    "id": "M3",
+    "name": "Community health centers",
+    "description": "Improve access to essential care in your district.",
+    "category": "Social",
+    "cost": 25,
+    "lag": "2 hours",
+    "scope": "district",
+    "effects": [
+      "Healthcare +12"
+    ]
+  },
+  {
+    "id": "M4",
+    "name": "School modernization",
+    "description": "Create better learning environments for the next generation.",
+    "category": "Social",
+    "cost": 20,
+    "lag": "3 hours",
+    "scope": "district",
+    "effects": [
+      "Education +10",
+      "Infrastructure +2"
+    ]
+  },
+  {
+    "id": "M5",
+    "name": "Road maintenance",
+    "description": "Repair local roads and make everyday journeys safer.",
+    "category": "Infrastructure",
+    "cost": 15,
+    "lag": "1 hour",
+    "scope": "district",
+    "effects": [
+      "Infrastructure +8",
+      "Transport +3"
+    ]
+  },
+  {
+    "id": "M6",
+    "name": "Clean city program",
+    "description": "Upgrade waste collection across the entire city.",
+    "category": "Environment",
+    "cost": 20,
+    "lag": "2 hours",
+    "scope": "city",
+    "effects": [
+      "Environment +5"
+    ]
+  },
+  {
+    "id": "M7",
+    "name": "Safer crossings",
+    "description": "Make streets more accessible for people on foot.",
+    "category": "Transport",
+    "cost": 10,
+    "lag": "1 hour",
+    "scope": "district",
+    "effects": [
+      "Transport +5",
+      "Infrastructure +3"
+    ]
+  },
+  {
+    "id": "M8",
+    "name": "Public lighting",
+    "description": "Light up streets and shared spaces after dark.",
+    "category": "Infrastructure",
+    "cost": 10,
+    "lag": "1 hour",
+    "scope": "district",
+    "effects": [
+      "Infrastructure +6"
+    ]
+  },
+  {
+    "id": "M9",
+    "name": "Youth community spaces",
+    "description": "Give young residents space to learn and connect.",
+    "category": "Social",
+    "cost": 15,
+    "lag": "2 hours",
+    "scope": "district",
+    "effects": [
+      "Education +6",
+      "Healthcare +2"
+    ]
+  },
+  {
+    "id": "M10",
+    "name": "Water network renewal",
+    "description": "Improve the reliability of essential utilities.",
+    "category": "Infrastructure",
+    "cost": 30,
+    "lag": "3 hours",
+    "scope": "district",
+    "effects": [
+      "Infrastructure +14"
+    ]
+  },
+  {
+    "id": "M11",
+    "name": "Air quality monitoring",
+    "description": "Make city-wide environmental information accessible.",
+    "category": "Environment",
+    "cost": 10,
+    "lag": "1 hour",
+    "scope": "city",
+    "effects": [
+      "Environment +3"
+    ]
+  },
+  {
+    "id": "M12",
+    "name": "Digital city services",
+    "description": "Make everyday municipal services easier to access.",
+    "category": "Infrastructure",
+    "cost": 15,
+    "lag": "2 hours",
+    "scope": "city",
+    "effects": [
+      "Infrastructure +4"
+    ]
+  }
+];

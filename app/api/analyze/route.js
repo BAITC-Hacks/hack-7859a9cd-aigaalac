@@ -1,4 +1,4 @@
-import { analyzeSimulation } from '../../../../lib/ai/analyst.js';
+import { analyzeSimulation } from '../../../lib/ai/analyst.js';
 
 export async function POST(request) {
   try {
