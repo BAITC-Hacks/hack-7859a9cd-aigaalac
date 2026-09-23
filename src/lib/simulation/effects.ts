@@ -1,4 +1,4 @@
-import { simulationSimulationMeasures } from "@/data/simulationSimulationMeasures";
+import { simulationSimulationMeasures } from "@/data/engineMeasures";
 import type {
   District,
   IndicatorCode,
@@ -46,7 +46,7 @@ export function applyDecision(
   state: Record<string, District>,
   decision: Decision
 ): AppliedEffect[] {
-  const measure = simulationmeasures.find(
+  const measure = Object.values(simulationSimulationMeasures).find(
     (item) => item.id === decision.measureId
   );
 

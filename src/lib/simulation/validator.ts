@@ -1,5 +1,5 @@
-import { simulationSimulationDistricts } from "@/data/simulationSimulationDistricts";
-import { simulationSimulationMeasures } from "@/data/simulationSimulationMeasures";
+import { simulationSimulationMeasures } from "@/data/engineMeasures";
+import { simulationSimulationDistricts } from "@/data/engineDistricts";
 
 import type {
   Decision,
@@ -27,7 +27,7 @@ export function validateStrategy(
 
   // Unknown measure IDs
   for (const decision of decisions) {
-    const measure = simulationmeasures.find(
+    const measure = Object.values(simulationSimulationMeasures).find(
       (item) => item.id === decision.measureId
     );
 
@@ -42,7 +42,7 @@ export function validateStrategy(
   // Keep only known simulationmeasures
   const validDecisions = decisions.filter(
     (decision) =>
-      simulationmeasures.some(
+      Object.values(simulationSimulationMeasures).some(
         (item) => item.id === decision.measureId
       )
   );
@@ -66,7 +66,7 @@ export function validateStrategy(
   // Budget
   const totalCost = validDecisions.reduce(
     (sum, decision) => {
-      const measure = simulationmeasures.find(
+      const measure = Object.values(simulationSimulationMeasures).find(
         (item) =>
           item.id === decision.measureId
       );
@@ -85,7 +85,7 @@ export function validateStrategy(
 
   // District validation
   for (const decision of validDecisions) {
-    const measure = simulationmeasures.find(
+    const measure = Object.values(simulationSimulationMeasures).find(
       (item) =>
         item.id === decision.measureId
     );
@@ -102,7 +102,7 @@ export function validateStrategy(
         continue;
       }
 
-      const districtExists = simulationdistricts.some(
+      const districtExists = Object.values(simulationSimulationDistricts).some(
         (district) =>
           district.id === decision.districtId
       );
@@ -131,7 +131,7 @@ export function validateStrategy(
   const categoryCounts: Record<string, number> = {};
 
   for (const decision of validDecisions) {
-    const measure = simulationmeasures.find(
+    const measure = Object.values(simulationSimulationMeasures).find(
       (item) =>
         item.id === decision.measureId
     );

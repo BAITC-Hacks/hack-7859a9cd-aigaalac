@@ -1,5 +1,5 @@
-import { simulationdistricts } from "@/data/simulationdistricts";
-import { simulationmeasures } from "@/data/simulationmeasures";
+import { simulationSimulationMeasures } from "@/data/engineMeasures";
+import { simulationSimulationDistricts } from "@/data/engineDistricts";
 
 import type {
   Decision,
@@ -37,10 +37,10 @@ export function simulateStrategy(
 
   // 2. Clone baseline data
   const simulationdistrictsBefore =
-    cloneSimulationDistricts(simulationdistricts);
+    cloneSimulationDistricts(Object.values(simulationSimulationDistricts));
 
   const simulationdistrictsAfter =
-    cloneSimulationDistricts(simulationdistricts);
+    cloneSimulationDistricts(Object.values(simulationSimulationDistricts));
 
   // 3. Baseline score
   const baseline =
@@ -51,7 +51,7 @@ export function simulateStrategy(
   // 4. Budget
   const spent = decisions.reduce(
     (sum, decision) => {
-      const measure = simulationmeasures.find(
+      const measure = Object.values(simulationSimulationMeasures).find(
         (item) =>
           item.id === decision.measureId
       );
